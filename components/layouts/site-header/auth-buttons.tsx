@@ -28,7 +28,7 @@ const AuthButtons = ({ user }: AuthButtonsProps) => {
   return (
     <Button
       variant="outline"
-      className="font-oxanium flex items-center gap-1 text-sm font-medium"
+      className="font-oxanium flex cursor-pointer items-center gap-1 text-sm font-medium"
       onClick={!isLoggedIn ? handleSignIn : undefined}
       asChild={isLoggedIn}
       disabled={isPending}

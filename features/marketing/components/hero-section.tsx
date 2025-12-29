@@ -1,9 +1,10 @@
-import { IconDownload, IconSearch } from '@tabler/icons-react';
+import { IconSearch } from '@tabler/icons-react';
 import Link from 'next/link';
 
 import { Button } from '@/components/ui/button';
 import { TextLoop } from '@/components/ui/text-loop';
 
+import { ExtensionResourcesDialog } from './extension-resources-dialog';
 const HeroSection = () => {
   return (
     <section className="relative overflow-hidden px-6 py-14 md:px-8 md:py-20" aria-labelledby="hero-heading">
@@ -56,13 +57,7 @@ const HeroSection = () => {
         </p>
 
         <div className="flex flex-col items-center justify-center gap-4 md:flex-row">
-          <Button
-            variant="default"
-            className="font-oxanium flex h-10 items-center gap-2 rounded bg-white px-6 text-base font-medium text-neutral-950 shadow-lg shadow-white/5 transition-all hover:scale-105 hover:bg-neutral-200"
-          >
-            <IconDownload className="size-4" aria-hidden="true" />
-            Install Extension
-          </Button>
+          <ExtensionResourcesDialog />
           <Button
             variant="outline"
             className="font-oxanium flex h-10 items-center gap-2 rounded border border-neutral-800 bg-neutral-900/50 px-6 text-base font-medium text-neutral-300 backdrop-blur-sm transition-all hover:border-neutral-600 hover:text-white"

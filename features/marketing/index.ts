@@ -5,6 +5,7 @@
  */
 
 // Components
+export * from './components/extension-resources-dialog';
 export * from './components/featured-profiles-section';
 export * from './components/hero-section';
 export * from './components/how-it-works-section';
