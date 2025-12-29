@@ -1,0 +1,166 @@
+{
+  "name": "setuphub-sync",
+  "displayName": "SetupHub Sync",
+  "description": "Sync and share your IDE setup (extensions, settings, themes) across devices. Works with VS Code, Cursor, Windsurf, Antigravity, and more!",
+  "version": "0.1.0",
+  "publisher": "devkraken",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dev-kraken/setuphub-dev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dev-kraken/setuphub-dev/issues"
+  },
+  "homepage": "https://github.com/dev-kraken/setuphub-dev#readme",
+  "keywords": [
+    "sync",
+    "settings",
+    "extensions",
+    "backup",
+    "share",
+    "profile",
+    "developer-tools",
+    "vscode",
+    "cursor",
+    "antigravity",
+    "windsurf",
+    "ide",
+    "setup",
+    "themes",
+    "fonts",
+    "preferences",
+    "configuration",
+    "restore"
+  ],
+  "author": {
+    "name": "DevKraken",
+    "url": "https://github.com/dev-kraken"
+  },
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "setuphub.sync",
+        "title": "SetupHub: Sync My Setup",
+        "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "setuphub.login",
+        "title": "SetupHub: Login",
+        "icon": "$(sign-in)"
+      },
+      {
+        "command": "setuphub.newToken",
+        "title": "SetupHub: New Token",
+        "icon": "$(key)"
+      },
+      {
+        "command": "setuphub.profile",
+        "title": "SetupHub: View My Profile",
+        "icon": "$(account)"
+      },
+      {
+        "command": "setuphub.logout",
+        "title": "SetupHub: Logout",
+        "icon": "$(sign-out)"
+      },
+      {
+        "command": "setuphub.browse",
+        "title": "SetupHub: Browse Community Setups",
+        "icon": "$(globe)"
+      }
+    ],
+    "configuration": {
+      "title": "SetupHub Sync",
+      "properties": {
+        "setuphub.autoSync": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically sync your setup when settings change",
+          "markdownDescription": "When enabled, SetupHub will prompt you to sync your setup whenever you modify IDE settings. This ensures your setup stays up-to-date across all your devices."
+        },
+        "setuphub.apiUrl": {
+          "type": "string",
+          "default": "https://setuphub.dev/api",
+          "description": "Backend API URL for SetupHub service",
+          "markdownDescription": "The base URL for the SetupHub API. Change this only if you're using a self-hosted instance. Default is the official SetupHub service.\n\n**⚠️ Developer Note:** If changing the default, also update `Defaults.API_URL` in `src/config/constants.ts` to keep them synchronized."
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "setuphub.sync"
+        },
+        {
+          "command": "setuphub.login"
+        },
+        {
+          "command": "setuphub.newToken"
+        },
+        {
+          "command": "setuphub.profile"
+        },
+        {
+          "command": "setuphub.logout"
+        },
+        {
+          "command": "setuphub.browse"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run build",
+    "build": "node esbuild.js --production",
+    "dev": "node esbuild.js --watch",
+    "compile": "tsc -p ./",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "check-types": "tsc --noEmit",
+    "clean": "rm -rf out dist",
+    "package": "pnpm run build && NPM_CONFIG_UPDATE_NOTIFIER=false vsce package --no-dependencies 2>&1 | grep -v 'npm warn' || true",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.18.0",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^18.19.130",
+    "@types/vscode": "^1.85.0",
+    "@vscode/test-electron": "^2.3.8",
+    "@vscode/vsce": "^2.32.0",
+    "esbuild": "^0.27.0",
+    "eslint": "^9.39.1",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "^15.2.2",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.47.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "axios": "^1.13.2"
+  }
+}

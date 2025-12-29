@@ -1,0 +1,95 @@
+# =============================================================================
+# VS Code Extension Package Ignore
+# Files listed here are EXCLUDED from the .vsix package
+# =============================================================================
+
+# Source files (we ship compiled JS only)
+src/**
+**/*.ts
+!dist/**/*.js
+
+# Source maps (not needed in production)
+**/*.map
+
+# Test files
+**/__tests__/**
+**/__mocks__/**
+**/*.test.ts
+**/*.test.js
+**/*.spec.ts
+**/*.spec.js
+coverage/**
+.nyc_output/**
+jest.config.js
+
+# Build configuration
+tsconfig.json
+esbuild.js
+eslint.config.mjs
+.eslintrc.json
+.eslintrc.js
+.eslintrc
+
+# Prettier configuration
+.prettierrc
+.prettierrc.json
+.prettierrc.js
+.prettierignore
+
+# Git and GitHub
+.git/**
+.gitignore
+.gitattributes
+.github/**
+
+# IDE and editor settings
+.vscode/**
+.vscode-test/**
+.idea/**
+
+# Documentation (keep README.md and LICENSE)
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+CHANGELOG.md
+docs/**
+
+# Package manager files
+node_modules/**
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+.npmrc
+.yarnrc
+.pnpmfile.cjs
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Development files
+*.vsix
+*.log
+tmp/**
+temp/**
+.tmp/**
+.temp/**
+
+# Environment files
+.env
+.env.*
+
+# Husky and lint-staged
+.husky/**
+lint-staged.config.js
+.lintstagedrc
+
+# TypeScript build info
+*.tsbuildinfo
+
+# Miscellaneous
+**/.editorconfig
+**/webpack.config.js
+**/rollup.config.js
+**/vite.config.js
