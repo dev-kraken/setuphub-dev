@@ -1,5 +1,7 @@
 import '@/styles/globals.css';
 
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 import { AppBackground } from '@/components/layouts/app-background';
 import SiteFooter from '@/components/layouts/site-footer';
 import SiteHeader from '@/components/layouts/site-header';
@@ -43,6 +45,7 @@ export default function RootLayout({
             <Toaster richColors={true} />
           </AppBackground>
         </ThemeProvider>
+        <GoogleAnalytics gaId="G-D0MJV3MV1K" />
       </body>
     </html>
   );
