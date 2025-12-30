@@ -6,7 +6,7 @@ export const siteConfig: SiteConfig = {
   description:
     'Sync and share your VS Code, Cursor, or any IDE setup with the developer community. One-click backup of extensions, themes, and settings.',
   url: process.env.NEXT_PUBLIC_APP_URL ?? 'https://setuphub.dev',
-  ogImage: '/images/og/og-setuphub.svg',
+  ogImage: '/images/og/og-setuphub.png',
   keywords: ['vscode', 'ide', 'setup', 'extensions', 'themes', 'developer tools', 'sync', 'backup'],
   locale: 'en_US',
   author: {
