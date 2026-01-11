@@ -1,12 +1,14 @@
 'use client';
 
 import { Copy, Eye, EyeOff } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { toast } from 'sonner';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Skeleton } from '@/components/ui/skeleton';
 
 import { createToken, updateToken } from '../../actions/token';
 
@@ -15,16 +17,20 @@ interface GenerateTokenProps {
 }
 
 const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [showTokenDialog, setShowTokenDialog] = useState(false);
   const [newToken, setNewToken] = useState<string | null>(null);
   const [isTokenVisible, setIsTokenVisible] = useState(false);
+  const [isNewToken, setIsNewToken] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleGenerateToken = async () => {
     startTransition(async () => {
       try {
+        const isCreating = !tokenId;
         let response;
-        if (!tokenId) {
+        if (isCreating) {
           response = await createToken();
         } else {
           response = await updateToken(tokenId);
@@ -33,6 +39,7 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
           setNewToken(response.plainToken);
           setShowTokenDialog(true);
           setIsTokenVisible(true);
+          setIsNewToken(isCreating);
           toast.success('Token generated successfully');
         }
 
@@ -57,7 +64,34 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
     setShowTokenDialog(false);
     setNewToken(null);
     setIsTokenVisible(false);
+    // Refresh the page after dialog closes for first-time token creation
+    // This updates the UI to show the TokenDisplay component
+    if (isNewToken) {
+      setIsNewToken(false);
+      setIsRefreshing(true);
+      router.refresh();
+    }
   };
+
+  // Show skeleton while refreshing after first-time token creation
+  if (isRefreshing) {
+    return (
+      <div className="animate-in fade-in space-y-3 duration-200">
+        {/* Token Active status skeleton */}
+        <div className="flex items-center gap-2 rounded border border-green-500/20 bg-green-500/10 p-3">
+          <Skeleton className="h-5 w-5 rounded bg-green-500/30" />
+          <div className="flex-1 space-y-1.5">
+            <Skeleton className="h-3 w-20 bg-green-500/30" />
+            <Skeleton className="h-2.5 w-28 bg-neutral-700/50" />
+          </div>
+        </div>
+        {/* Security note skeleton */}
+        <Skeleton className="h-2.5 w-full bg-neutral-700/50" />
+        {/* Regenerate button skeleton */}
+        <Skeleton className="mt-2 h-9 w-full rounded border border-dashed border-neutral-700 bg-neutral-800/50" />
+      </div>
+    );
+  }
 
   return (
     <>
@@ -71,7 +105,12 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
       </Button>
 
       <Dialog open={showTokenDialog} onOpenChange={handleCloseDialog}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent
+          className="sm:max-w-lg"
+          onInteractOutside={(e) => {
+            e.preventDefault();
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="font-oxanium text-xl font-semibold text-white">Your New Access Token</DialogTitle>
             <DialogDescription className="text-neutral-400">
