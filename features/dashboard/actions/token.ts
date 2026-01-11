@@ -48,8 +48,6 @@ export const createToken = async (): Promise<CreateTokenResponse> => {
     })
     .returning();
 
-  revalidatePath('/dashboard');
-
   return {
     success: true,
     data,
