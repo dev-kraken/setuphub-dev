@@ -149,7 +149,11 @@ export function BannerEditorPage() {
         <div className="flex flex-col items-center lg:col-span-8">
           <div className="mb-6 flex w-full items-end justify-between">
             <h2 className="font-oxanium text-3xl font-semibold text-white">Preview</h2>
-            <ExportButton isExporting={isExporting} error={exportError} onExport={() => handleExport().catch((error: Error) => toast.error(error.message))} />
+            <ExportButton
+              isExporting={isExporting}
+              error={exportError}
+              onExport={() => handleExport().catch((error: Error) => toast.error(error.message))}
+            />
           </div>
 
           <BannerPreview
