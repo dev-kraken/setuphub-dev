@@ -7,7 +7,7 @@ export {
   ControlSection,
   ExportButton,
   IconographyControls,
-  TypographyControls,
+  TypographyControls
 } from './components';
 
 // Hooks
@@ -24,11 +24,12 @@ export type {
   FontFamily,
   IconographyControlsProps,
   Theme,
-  TypographyControlsProps,
+  TypographyControlsProps
 } from './types';
 export { FONT_FAMILY, THEME } from './types';
 
 // Constants
+export type { IconName, PresetFont } from './lib/constants';
 export {
   BACKGROUND_TEXTURE_OPACITY,
   BORDER_OPACITY,
@@ -40,17 +41,15 @@ export {
   FONT_SIZE_MIN,
   FOOTER_MAX_LENGTH,
   ICON_MAP,
-  ICON_SIZE,
-  isPresetFont,
+  ICON_SIZE, isPresetFont,
   isValidIconName,
-  PRESET_COLORS,
+PRESET_COLORS,
   PRESET_FONTS,
   RADIAL_GLOW_OPACITY,
-  TITLE_MAX_LENGTH,
-} from './lib/constants';
-export type { IconName, PresetFont } from './lib/constants';
+  TITLE_MAX_LENGTH} from './lib/constants';
 
 // Utils
+export type { ParsedFooter } from './lib/utils';
 export {
   hexToRgba,
   isValidHexColor,
@@ -58,9 +57,15 @@ export {
   parseFooterText,
   sanitizeFilename,
   sanitizeInput,
-  shadeColor,
+  shadeColor
 } from './lib/utils';
-export type { ParsedFooter } from './lib/utils';
+
+// Fonts (client-side utilities)
+export type { FontCategory, FontLoadResult, FontPickerProps, FontWeight, GoogleFont } from './lib/fonts';
+export { FONT_CATEGORIES, FONT_WEIGHTS, getFontUrl, isFontLoaded, loadFont } from './lib/fonts';
+
+// Actions (server-side)
+export { getGoogleFonts } from './actions/fonts';
 
 // Pages
 export { BannerEditorPage } from './pages/banner-editor-page';
