@@ -25,11 +25,41 @@ const IDE_REGISTRY = {
     label: 'Windsurf',
     icon: '/images/ide-icons/windsurf.svg',
   },
+  'intellij-idea': {
+    id: 'intellij-idea',
+    label: 'IntelliJ IDEA',
+    icon: '/images/ide-icons/intellij-idea.svg',
+  },
+  phpstorm: {
+    id: 'phpstorm',
+    label: 'PHPStorm',
+    icon: '/images/ide-icons/phpstorm.svg',
+  },
+  webstorm: {
+    id: 'webstorm',
+    label: 'WebStorm',
+    icon: '/images/ide-icons/webstorm.svg',
+  },
+  pycharm: {
+    id: 'pycharm',
+    label: 'PyCharm',
+    icon: '/images/ide-icons/pycharm.svg',
+  },
+  junie: {
+    id: 'junie',
+    label: 'Junie',
+    icon: '/images/ide-icons/junie.svg',
+  },
+  default:{
+    id: 'unknown',
+    label: 'Unknown',
+    icon: '/images/logos/icon-light.svg',
+  }
 } as const satisfies Record<string, { id: string; label: string; icon: string }>;
 
 export type IDEId = keyof typeof IDE_REGISTRY;
 
-const DEFAULT_IDE_ID: IDEId = 'vscode';
+const DEFAULT_IDE_ID: IDEId = 'default';
 
 /**
  * Get IDE metadata by editor name.
