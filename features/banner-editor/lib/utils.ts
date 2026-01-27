@@ -71,13 +71,24 @@ export function hexToRgba(hex: string, alpha: number): string {
 }
 
 /**
- * Sanitizes user input by trimming and limiting length.
+ * Sanitizes user input by limiting length (no trim to avoid cursor jump).
+ * Use `trimInput` on blur for final trimming.
  * @param input - The input string to sanitize
  * @param maxLength - Maximum length of the output (default: 100)
- * @returns Sanitized string
+ * @returns Sanitized string (length-limited only)
  */
 export function sanitizeInput(input: string, maxLength: number = 100): string {
-  return input.slice(0, maxLength).trim();
+  return input.slice(0, maxLength);
+}
+
+/**
+ * Trims whitespace from input string.
+ * Use this on blur to avoid cursor jumping during typing.
+ * @param input - The input string to trim
+ * @returns Trimmed string
+ */
+export function trimInput(input: string): string {
+  return input.trim();
 }
 
 /**

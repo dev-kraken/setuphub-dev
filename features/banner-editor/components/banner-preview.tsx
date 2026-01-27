@@ -1,13 +1,25 @@
 'use client';
 
-import { memo, useEffect } from 'react';
+import { createElement, memo, useEffect, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-import { BORDER_OPACITY, getFontFamily, ICON_MAP, ICON_SIZE, isPresetFont, isValidIconName } from '../lib/constants';
+import { BORDER_OPACITY, getFontFamily, getIcon, ICON_SIZE, isPresetFont } from '../lib/constants';
 import { loadFont } from '../lib/fonts';
 import { hexToRgba, parseFooterText, shadeColor } from '../lib/utils';
 import { type BannerPreviewProps, THEME } from '../types';
+
+/** Memoized icon component using createElement to satisfy react-compiler */
+const BannerIcon = memo(function BannerIcon({ iconName }: { iconName: string }) {
+  return createElement(getIcon(iconName), {
+    size: ICON_SIZE,
+    className: 'text-white drop-shadow-sm',
+    stroke: 2,
+    'aria-hidden': 'true',
+  });
+});
+
+BannerIcon.displayName = 'BannerIcon';
 
 export const BannerPreview = memo(function BannerPreview({
   theme,
@@ -20,20 +32,30 @@ export const BannerPreview = memo(function BannerPreview({
   footerRight,
   previewRef,
 }: BannerPreviewProps) {
-  const IconComponent = isValidIconName(selectedIcon) ? ICON_MAP[selectedIcon] : ICON_MAP.Activity;
   const fontFamily = getFontFamily(selectedFont);
   const isGoogleFont = !isPresetFont(selectedFont);
   const parsedFooter = parseFooterText(footerLeft);
 
-  // Load Google Font if needed
+  // Track mounted state to prevent state updates after unmount
+  const isMountedRef = useRef(true);
+
+  // Load Google Font if needed with cleanup
   useEffect(() => {
+    isMountedRef.current = true;
+
     if (isGoogleFont && selectedFont) {
       loadFont(selectedFont).then((result) => {
-        if (!result.success) {
+        // Only log errors if component is still mounted
+        if (isMountedRef.current && !result.success) {
           console.error('Failed to load font:', result.error);
         }
       });
     }
+
+    // Cleanup: mark as unmounted to prevent stale updates
+    return () => {
+      isMountedRef.current = false;
+    };
   }, [isGoogleFont, selectedFont]);
 
   return (
@@ -69,7 +91,7 @@ export const BannerPreview = memo(function BannerPreview({
               background: `linear-gradient(135deg, ${accentColor}, ${shadeColor(accentColor, -50)})`,
             }}
           >
-            <IconComponent size={ICON_SIZE} className="text-white drop-shadow-sm" stroke={2} aria-hidden="true" />
+            <BannerIcon iconName={selectedIcon} />
           </div>
 
           <h1

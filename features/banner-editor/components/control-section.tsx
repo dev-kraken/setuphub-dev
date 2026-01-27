@@ -26,7 +26,7 @@ export const ControlSection = memo(function ControlSection({
       className="border-b border-white/5 pb-4 mb-4 last:border-0 last:mb-0 last:pb-0"
     >
       <CollapsibleTrigger
-        className="w-full flex items-center justify-between py-2 text-sm font-bold text-neutral-300 hover:text-white transition-colors group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20"
+        className="w-full flex items-center justify-between py-2 text-sm font-semibold text-neutral-300 hover:text-white transition-colors group rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/20 font-oxanium"
         aria-label={`${isOpen ? 'Collapse' : 'Expand'} ${title} section`}
       >
         <span className="group-hover:translate-x-1 transition-transform">
