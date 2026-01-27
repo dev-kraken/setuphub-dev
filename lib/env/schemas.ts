@@ -43,6 +43,7 @@ export const serverSchema = z.object({
   GITHUB_CLIENT_ID: requiredString('GITHUB_CLIENT_ID'),
   GITHUB_CLIENT_SECRET: requiredString('GITHUB_CLIENT_SECRET'),
   DATABASE_URL: requiredUrl('DATABASE_URL'),
+  GOOGLE_FONTS_API_KEY: requiredString('GOOGLE_FONTS_API_KEY'),
 });
 
 // ============================================================================
