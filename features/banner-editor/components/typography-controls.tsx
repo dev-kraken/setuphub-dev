@@ -3,6 +3,8 @@
 import dynamic from 'next/dynamic';
 import { memo, useCallback } from 'react';
 
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
 import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 
@@ -42,9 +44,9 @@ export const TypographyControls = memo(function TypographyControls({
     <div className="w-full space-y-4">
       <div className="w-full">
         <div className="mb-3 flex items-center justify-between">
-          <label id="font-family-label" className="text-sm font-semibold text-neutral-400">
+          <Label id="font-family-label" className="text-sm font-medium text-neutral-400 font-oxanium">
             Font Family
-          </label>
+          </Label>
           <span id="font-size-value" className="rounded bg-white/5 px-2 py-1 font-mono text-xs text-neutral-400">
             {titleFontSize}px
           </span>
@@ -57,8 +59,9 @@ export const TypographyControls = memo(function TypographyControls({
           aria-labelledby="font-family-label"
         >
           {PRESET_FONTS.map((fontKey) => (
-            <button
+            <Button
               key={fontKey}
+              variant="ghost"
               onClick={() => onFontChange(fontKey)}
               className={cn(
                 'min-h-[44px] w-full truncate rounded-lg border px-3 py-3 text-sm font-medium transition-all focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:outline-none',
@@ -72,13 +75,13 @@ export const TypographyControls = memo(function TypographyControls({
               aria-label={`Select ${fontKey} font`}
             >
               {fontKey}
-            </button>
+            </Button>
           ))}
         </div>
 
         {/* Google Fonts Picker */}
         <div className="mt-4 w-full space-y-2">
-          <label className="block text-sm font-semibold text-neutral-400">Or choose from Google Fonts</label>
+          <Label className="block text-sm font-medium text-neutral-400 font-oxanium">Or choose from Google Fonts</Label>
           <FontPicker
             value={isCurrentFontPreset ? undefined : selectedFont}
             onChange={handleFontPickerChange}
@@ -89,9 +92,9 @@ export const TypographyControls = memo(function TypographyControls({
 
         {/* Font Size Slider */}
         <div className="mt-4 w-full space-y-3">
-          <label id="font-size-label" className="block text-sm font-semibold text-neutral-400">
+          <Label id="font-size-label" className="block text-sm font-medium text-neutral-400 font-oxanium">
             Font Size
-          </label>
+          </Label>
           <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-black/20 p-3">
             <span className="text-xs font-medium text-neutral-500" aria-hidden="true">
               Aa

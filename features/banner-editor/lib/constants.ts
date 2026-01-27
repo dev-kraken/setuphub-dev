@@ -1,67 +1,9 @@
-import {
-  IconActivity,
-  IconAnchor,
-  IconAperture,
-  IconArchive,
-  IconArrowRight,
-  IconAward,
-  IconBell,
-  IconBolt,
-  IconBox,
-  IconBriefcase,
-  IconCalendar,
-  IconCamera,
-  IconCheck,
-  IconChevronDown,
-  IconDeviceDesktop,
-  IconGitBranch,
-  IconHash,
-  IconHeart,
-  IconMoodSmile,
-  IconSettings,
-  IconStar,
-  IconThumbUp,
-  IconUser,
-  IconX,
-} from '@tabler/icons-react';
+import { IconChevronDown } from '@tabler/icons-react';
 
 import { FONT_FAMILY } from '../types';
 
-// Icon map with Tabler icons
-export const ICON_MAP = {
-  Star: IconStar,
-  Heart: IconHeart,
-  Zap: IconBolt,
-  Award: IconAward,
-  Smile: IconMoodSmile,
-  ThumbsUp: IconThumbUp,
-  Bell: IconBell,
-  User: IconUser,
-  Settings: IconSettings,
-  Check: IconCheck,
-  X: IconX,
-  Activity: IconActivity,
-  Airplay: IconDeviceDesktop,
-  Anchor: IconAnchor,
-  Aperture: IconAperture,
-  Archive: IconArchive,
-  ArrowRight: IconArrowRight,
-  Box: IconBox,
-  Briefcase: IconBriefcase,
-  Calendar: IconCalendar,
-  Camera: IconCamera,
-  GitGraph: IconGitBranch,
-  Hash: IconHash,
-} as const;
-
-export type IconName = keyof typeof ICON_MAP;
-
-/**
- * Type guard to check if a string is a valid IconName.
- */
-export function isValidIconName(icon: string): icon is IconName {
-  return icon in ICON_MAP;
-}
+// Re-export icon utilities from the icons module
+export { getIcon, ICON_LIST, ICON_MAP, type IconName,isValidIconName } from './icons';
 
 export const PRESET_COLORS = [
   '#3b82f6',
@@ -134,12 +76,12 @@ export const BACKGROUND_TEXTURE_OPACITY = 0.03;
 
 export const DEFAULT_CONFIG = {
   theme: 'dark' as const,
-  accentColor: '#f97316',
-  selectedIcon: 'GitGraph',
+  accentColor: '#f43f5e',
+  selectedIcon: 'Heart',
   selectedFont: FONT_FAMILY.SANS,
   titleFontSize: 60,
-  title: 'Git Migration Tool',
-  footerLeft: '>_ git-migration-tool',
+  title: 'SetupHub.dev',
+  footerLeft: '>_ setuphub.dev',
   footerRight: '#dev-kraken',
 };
 

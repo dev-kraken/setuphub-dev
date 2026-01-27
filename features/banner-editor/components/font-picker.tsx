@@ -181,10 +181,8 @@ export function FontPicker({
           aria-label="Select font"
           className={cn('group relative h-12 w-full justify-between', className)}
         >
-          <span className="truncate">
-            {selectedFont
-              ? filteredFonts.find((font) => font.family === selectedFont.family)?.family
-              : 'Select font...'}
+          <span className="truncate font-oxanium text-sm font-medium">
+            {selectedFont?.family ?? 'Select font...'}
           </span>
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -195,7 +193,7 @@ export function FontPicker({
             placeholder="Search fonts..."
             value={search}
             onValueChange={setSearch}
-            className="border-none focus:ring-0"
+            className="border-none focus:ring-0 font-oxanium text-sm font-medium"
           />
           <div className="flex w-full items-center justify-between gap-2 border-b px-3 py-1">
             {showFilters && (

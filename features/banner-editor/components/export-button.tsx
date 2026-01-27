@@ -1,8 +1,9 @@
 'use client';
 
-import { IconDownload, IconLoader2 } from '@tabler/icons-react';
+import { IconAlertCircle, IconDownload, IconLoader2 } from '@tabler/icons-react';
 import { memo } from 'react';
 
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 
 import type { ExportButtonProps } from '../types';
@@ -17,7 +18,8 @@ export const ExportButton = memo(function ExportButton({
       <Button
         onClick={onExport}
         disabled={isExporting}
-        className="px-6 py-2 bg-white text-black rounded-full text-sm font-bold hover:bg-neutral-200 transition-colors shadow-lg active:scale-95"
+        variant="default"
+        className="px-6 py-2 text-sm font-medium text-black bg-white hover:bg-neutral-200 cursor-pointer"
         aria-label="Download banner as SVG"
       >
         {isExporting ? (
@@ -33,9 +35,10 @@ export const ExportButton = memo(function ExportButton({
         )}
       </Button>
       {error && (
-        <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-400 text-sm">
-          {error}
-        </div>
+        <Alert variant="destructive" className="border-red-500/20 bg-red-500/10">
+          <IconAlertCircle className="h-4 w-4" />
+          <AlertDescription className="text-red-400">{error}</AlertDescription>
+        </Alert>
       )}
     </div>
   );

@@ -4,6 +4,7 @@ import { IconSettings } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 import { toSvg } from 'html-to-image';
 import { useCallback, useRef, useState } from 'react';
+import { toast } from 'sonner';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -57,6 +58,7 @@ export function BannerEditorPage() {
   const handleExport = useCallback(async () => {
     if (!previewRef.current) {
       setExportError('Preview not ready');
+      toast.error('Preview not ready');
       return;
     }
 
@@ -147,7 +149,7 @@ export function BannerEditorPage() {
         <div className="flex flex-col items-center lg:col-span-8">
           <div className="mb-6 flex w-full items-end justify-between">
             <h2 className="font-oxanium text-3xl font-semibold text-white">Preview</h2>
-            <ExportButton isExporting={isExporting} error={exportError} onExport={handleExport} />
+            <ExportButton isExporting={isExporting} error={exportError} onExport={() => handleExport().catch((error: Error) => toast.error(error.message))} />
           </div>
 
           <BannerPreview
