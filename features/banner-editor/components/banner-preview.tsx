@@ -94,7 +94,7 @@ export const BannerPreview = memo(function BannerPreview({
             <BannerIcon iconName={selectedIcon} />
           </div>
 
-          <h1
+          <h3
             className={cn(
               'w-auto text-center font-normal tracking-wide wrap-break-word transition-colors duration-300',
               theme === THEME.LIGHT ? 'text-neutral-900' : 'text-neutral-100',
@@ -106,7 +106,7 @@ export const BannerPreview = memo(function BannerPreview({
             }}
           >
             {title}
-          </h1>
+          </h3>
         </div>
 
         {/* Footer */}
