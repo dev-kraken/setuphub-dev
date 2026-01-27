@@ -16,8 +16,9 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 
+import { getGoogleFonts } from '../actions/fonts';
 import type { GoogleFont } from '../lib/fonts';
-import { fetchGoogleFonts, loadFont } from '../lib/fonts';
+import { loadFont } from '../lib/fonts';
 
 /** Props for a single font list item */
 interface FontListItemProps {
@@ -108,9 +109,9 @@ export function FontPicker({
     const loadFonts = async () => {
       try {
         setIsLoading(true);
-        const fetchedFonts = await fetchGoogleFonts();
+        const fetchedFonts = await getGoogleFonts();
         setFonts(fetchedFonts);
-        const font = fetchedFonts.find((font) => font.family === value);
+        const font = fetchedFonts.find((f) => f.family === value);
         if (font) {
           setSelectedFont(font);
         }
