@@ -10,7 +10,6 @@ import com.intellij.openapi.components.Service
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.editor.colors.EditorColorsManager
 import com.intellij.openapi.editor.ex.EditorSettingsExternalizable
-import javax.swing.UIManager
 
 /**
  * Service for collecting user's IDE setup configuration.
@@ -72,9 +71,15 @@ class SetupService {
         return ApplicationInfo.getInstance().versionName
     }
 
-    /** Uses UIManager to avoid deprecated LafManager.getCurrentLookAndFeel(); L&F is set by the IDE via UIManager. */
+    /** Strips the "_@user_" prefix that the IDE adds to custom color scheme names. */
+    private fun stripUserSchemePrefix(name: String?) = name?.removePrefix("_@user_")?.trim() ?: "Unknown"
+
+    /**
+     * Returns the current theme/color scheme name (e.g. "IntelliJ Light", "Darcula", "Islands Dark").
+     * Uses EditorColorsManager.globalScheme.name to avoid deprecated LafManager.getCurrentLookAndFeel().
+     */
     private fun getTheme(): String {
-        return UIManager.getLookAndFeel()?.name ?: "Unknown"
+        return stripUserSchemePrefix(EditorColorsManager.getInstance().globalScheme.name)
     }
 
     private fun getFontFamily(): String {
@@ -125,7 +130,7 @@ class SetupService {
             settings["editor.fontFamily"] = editorScheme.editorFontName
             settings["editor.fontSize"] = editorScheme.editorFontSize
             settings["editor.lineSpacing"] = editorScheme.lineSpacing
-            settings["editor.colorScheme"] = editorScheme.name
+            settings["editor.colorScheme"] = stripUserSchemePrefix(editorScheme.name)
             settings["console.fontFamily"] = editorScheme.consoleFontName
             settings["console.fontSize"] = editorScheme.consoleFontSize
             settings["console.lineSpacing"] = editorScheme.consoleLineSpacing
