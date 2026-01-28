@@ -58,17 +58,17 @@ function SearchResultItem({ user, isHighlighted, onSelect, onMouseEnter }: Searc
       onMouseEnter={onMouseEnter}
       className={cn(
         'flex items-center gap-3 rounded-lg p-3 transition-colors',
-        'hover:bg-white/5 focus:bg-white/5 focus:outline-none',
-        isHighlighted && 'bg-white/5',
+        'hover:bg-neutral-800/50 focus:bg-neutral-800/50 focus:outline-none',
+        isHighlighted && 'bg-neutral-800/50',
       )}
     >
-      <Avatar className="size-10 border border-neutral-800">
+      <Avatar className="size-10 border border-neutral-800/50">
         <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} />
         <AvatarFallback className="bg-neutral-800 text-sm text-neutral-400">{userInitial}</AvatarFallback>
       </Avatar>
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-white">{user.name}</p>
-        <p className="truncate text-xs text-neutral-500">@{user.username}</p>
+        <p className="font-oxanium truncate text-sm font-medium text-white">{user.name}</p>
+        <p className="font-inter truncate text-xs text-neutral-500">@{user.username}</p>
       </div>
     </Link>
   );
@@ -81,11 +81,11 @@ interface EmptyStateProps {
 function EmptyState({ query }: EmptyStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-8 text-center">
-      <div className="mb-3 rounded-full bg-neutral-800/50 p-3">
+      <div className="mb-3 flex size-12 items-center justify-center rounded-full border border-neutral-800/50 bg-neutral-900/50">
         <IconUser className="size-6 text-neutral-500" />
       </div>
-      <p className="text-sm font-medium text-neutral-400">No users found</p>
-      <p className="mt-1 text-xs text-neutral-600">No results for &quot;{query}&quot;</p>
+      <p className="font-oxanium text-sm font-semibold text-white">No users found</p>
+      <p className="font-inter mt-1 text-xs text-neutral-500">No results for &quot;{query}&quot;</p>
     </div>
   );
 }
@@ -185,7 +185,7 @@ export function UserSearch({ placeholder = 'Search users...', className, onSelec
   return (
     <div ref={containerRef} className={cn('relative w-full max-w-md', className)}>
       {/* Search Input */}
-      <InputGroup className="h-11 rounded-xl border-neutral-800 bg-neutral-900/50">
+      <InputGroup className="h-11 rounded-lg border-neutral-800/50 bg-neutral-900/30 backdrop-blur-sm transition-all focus-within:border-neutral-700/50 hover:border-neutral-700/50">
         <InputGroupAddon>
           <IconSearch className="text-neutral-500" />
         </InputGroupAddon>
@@ -211,7 +211,7 @@ export function UserSearch({ placeholder = 'Search users...', className, onSelec
               variant="ghost"
               onClick={handleClear}
               aria-label="Clear search"
-              className="rounded-full text-neutral-500 hover:bg-neutral-800 hover:text-neutral-300"
+              className="rounded-full text-neutral-500 transition-colors hover:bg-neutral-800/50 hover:text-neutral-300"
             >
               <IconX />
             </InputGroupButton>
@@ -226,7 +226,7 @@ export function UserSearch({ placeholder = 'Search users...', className, onSelec
           role="listbox"
           className={cn(
             'absolute top-full z-50 mt-2 w-full',
-            'rounded-xl border border-neutral-800 bg-neutral-900/95 shadow-2xl backdrop-blur-xl',
+            'rounded-xl border border-neutral-800/50 bg-neutral-900/95 shadow-2xl backdrop-blur-xl',
             'animate-in fade-in-0 zoom-in-95 slide-in-from-top-2',
             'max-h-[320px] overflow-y-auto',
           )}

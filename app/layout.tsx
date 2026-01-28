@@ -39,7 +39,7 @@ export default function RootLayout({
           <AppBackground>
             <div className="flex min-h-screen flex-col">
               <SiteHeader />
-              <main className="relative flex-1 overflow-hidden px-6 py-20">{children}</main>
+              <div className="relative flex-1 overflow-hidden px-4 py-12 md:px-8 md:py-20">{children}</div>
               <SiteFooter />
             </div>
             <Toaster richColors={true} />

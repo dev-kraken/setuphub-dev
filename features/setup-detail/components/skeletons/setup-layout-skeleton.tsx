@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 const SetupLayoutSkeleton = () => {
   return (
     <section className="z-20 mx-auto max-w-6xl">
-      <div className="grid min-h-[calc(100vh-10rem)] grid-cols-1 lg:grid-cols-12">
+      <div className="grid min-h-[calc(100vh-10rem)] grid-cols-1 gap-2 lg:grid-cols-12">
         {/* Sidebar Skeleton */}
         <div className="flex flex-col space-y-3 rounded-xl border border-neutral-800 p-5 lg:col-span-3">
           {/* User avatar and info */}

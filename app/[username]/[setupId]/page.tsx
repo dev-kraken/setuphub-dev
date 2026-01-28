@@ -79,7 +79,13 @@ export default async function Page({ params }: PageProps) {
     `${setupName} - ${ideMeta.label} configuration shared by ${setup.user.name} on SetupHub.`;
 
   return (
-    <main>
+    <main className="relative min-h-screen w-full">
+      {/* Background atmosphere */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/4 h-96 w-96 rounded-full bg-indigo-500/5 blur-3xl" />
+        <div className="absolute right-1/4 bottom-0 h-96 w-96 rounded-full bg-purple-500/5 blur-3xl" />
+      </div>
+
       <JsonLd
         data={[
           generateWebPageSchema(siteConfig, {
