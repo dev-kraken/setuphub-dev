@@ -1,6 +1,7 @@
 'use client';
 
-import { IconLoader2 } from '@tabler/icons-react';
+import { IconBox, IconLoader2 } from '@tabler/icons-react';
+import { motion } from 'motion/react';
 import { useCallback, useState, useTransition } from 'react';
 
 import { PublicSetupCard } from '@/components/shared/public-setup-card';
@@ -17,6 +18,7 @@ interface ExploreSetupsGridProps {
 /**
  * ExploreSetupsGrid - Displays a grid of public setups with load more pagination.
  * Uses cursor-based pagination for efficient data fetching.
+ * Refined design with staggered load animations.
  */
 const ExploreSetupsGrid = ({ initialData }: ExploreSetupsGridProps) => {
   const [setups, setSetups] = useState<SetupWithUser[]>(initialData.setups);
@@ -37,30 +39,55 @@ const ExploreSetupsGrid = ({ initialData }: ExploreSetupsGridProps) => {
 
   if (setups.length === 0) {
     return (
-      <div className="flex min-h-[200px] items-center justify-center rounded-xl border border-dashed border-neutral-800 bg-neutral-900/30">
-        <p className="text-sm text-neutral-500">No public setups found yet.</p>
-      </div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="flex min-h-[400px] items-center justify-center rounded-xl border border-neutral-800/50 bg-neutral-900/30 p-12 backdrop-blur-sm"
+      >
+        <div className="text-center">
+          <div className="mb-4 flex justify-center">
+            <div className="flex size-16 items-center justify-center rounded-full border border-neutral-800/50 bg-neutral-900/50">
+              <IconBox className="size-8 text-neutral-500" />
+            </div>
+          </div>
+          <h3 className="font-oxanium mb-2 text-lg font-semibold text-white">No public setups found</h3>
+          <p className="font-inter text-sm text-neutral-500">Be the first to share your setup with the community.</p>
+        </div>
+      </motion.div>
     );
   }
 
   return (
     <div className="space-y-8">
       {/* Setups Grid */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {setups.map((setup) => (
-          <PublicSetupCard key={setup.setups.id} setup={setup} />
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {setups.map((setup, index) => (
+          <motion.div
+            key={setup.setups.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <PublicSetupCard setup={setup} />
+          </motion.div>
         ))}
       </div>
 
       {/* Load More Button */}
       {hasMore && (
-        <div className="flex justify-center">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="flex justify-center"
+        >
           <Button
             variant="outline"
             size="lg"
             onClick={loadMore}
             disabled={isPending}
-            className="min-w-[160px] border-neutral-700 bg-neutral-900/50 text-neutral-300 hover:bg-neutral-800 hover:text-white"
+            className="min-w-[160px] border-neutral-800/50 bg-neutral-900/30 font-medium text-neutral-300 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 hover:text-white"
           >
             {isPending ? (
               <>
@@ -71,7 +98,7 @@ const ExploreSetupsGrid = ({ initialData }: ExploreSetupsGridProps) => {
               'Load More'
             )}
           </Button>
-        </div>
+        </motion.div>
       )}
     </div>
   );

@@ -11,6 +11,7 @@ type SettingCardProps = {
 
 /**
  * Card displaying a single editor setting.
+ * Refined design with improved typography and subtle details.
  */
 export const SettingCard = ({ name, value }: SettingCardProps) => {
   return <RenderSettingCard name={name} value={value as string} />;
@@ -30,29 +31,38 @@ const RenderSettingCard = ({ name, value }: { name: string; value: string }) => 
   if (!showOnlyTheseKeys.includes(name)) return null;
   if (!value || value === '' || value === 'undefined' || value === 'null' || value.length === 0) return null;
 
+  const getValueType = () => {
+    if (typeof value === 'boolean') {
+      return value ? 'success' : 'error';
+    }
+    if (typeof value === 'number') {
+      return 'info';
+    }
+    return 'warning';
+  };
+
+  const valueType = getValueType();
+
   return (
-    <div
-      key={name}
-      className="group flex items-center justify-between rounded border border-neutral-800 bg-neutral-900/30 p-3 transition-colors hover:bg-neutral-900/50"
-    >
-      <div className="flex flex-col gap-0.5">
-        <span className="font-oxanium text-sm font-medium text-neutral-200">{humanizedName}</span>
-        <span className="font-mono text-xs text-neutral-500">{name}</span>
+    <div className="group flex items-center justify-between gap-4 rounded-lg border border-neutral-800/50 bg-neutral-900/30 p-4 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50">
+      <div className="min-w-0 flex-1">
+        <h3 className="font-oxanium mb-1 text-sm font-semibold text-white">{humanizedName}</h3>
+        <p className="font-mono text-xs text-neutral-500">{name}</p>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="shrink-0">
         <span
           className={cn(
-            'rounded border px-1.5 py-0.5 font-mono text-xs',
-            typeof value === 'boolean'
-              ? value
-                ? 'border-green-500/20 bg-green-500/10 text-green-400'
-                : 'border-red-500/20 bg-red-500/10 text-red-400'
-              : typeof value === 'number'
-                ? 'border-blue-500/20 bg-blue-500/10 text-blue-400'
-                : 'border-orange-500/20 bg-orange-500/10 text-orange-400',
+            'inline-flex items-center rounded-md border px-2.5 py-1 font-mono text-xs font-medium',
+            valueType === 'success'
+              ? 'border-green-500/20 bg-green-500/10 text-green-400'
+              : valueType === 'error'
+                ? 'border-red-500/20 bg-red-500/10 text-red-400'
+                : valueType === 'info'
+                  ? 'border-blue-500/20 bg-blue-500/10 text-blue-400'
+                  : 'border-orange-500/20 bg-orange-500/10 text-orange-400',
           )}
         >
-          {typeof value === 'boolean' ? (value ? 'true' : 'false') : typeof value === 'number' ? value : 'off'}
+          {typeof value === 'boolean' ? (value ? 'true' : 'false') : typeof value === 'number' ? value : String(value)}
         </span>
       </div>
     </div>

@@ -1,6 +1,9 @@
+'use client';
+
 import { IconBrush, IconTextSize, IconTypography } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Blocks, CircleCheck, Palette, Sliders } from 'lucide-react';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 
 import StarButton from '@/components/shared/star-button';
@@ -17,44 +20,68 @@ type SetupSidebarProps = {
 
 /**
  * Sidebar for setup detail page showing user info and setup metadata.
+ * Refined editorial design with improved visual hierarchy.
  */
 export const SetupSidebar = ({ setup }: SetupSidebarProps) => {
   const user = setup.user;
   const ideMeta = getIdeMeta(setup.setups.editorName);
 
   return (
-    <div className="flex flex-col space-y-3 rounded-xl border border-neutral-800 p-5 lg:col-span-3">
-      <div className="flex w-full items-center justify-between text-center">
-        <div className="relative size-18 rounded-full bg-linear-to-tr from-purple-500 to-indigo-500 p-0.5 shadow-xl">
-          <Avatar className="size-full rounded-full border border-neutral-700">
-            <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} title={`${user.name}'s avatar`} />
-            <AvatarFallback>{user.name?.[0]}</AvatarFallback>
-          </Avatar>
+    <div className="flex h-full flex-col rounded-xl border border-neutral-800/50 bg-[#0A0A0A]/50 p-6 shadow-2xl ring-1 ring-white/5 backdrop-blur-sm">
+      {/* User Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="mb-6"
+      >
+        <div className="flex items-center gap-4">
+          <div className="relative shrink-0">
+            <div className="absolute inset-0 rounded-full bg-neutral-800/50 blur-md" />
+            <Avatar className="relative size-16 rounded-full border-2 border-neutral-800/50 ring-2 ring-neutral-900/50">
+              <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} title={`${user.name}'s avatar`} />
+              <AvatarFallback className="bg-neutral-800 text-neutral-300">{user.name?.[0]}</AvatarFallback>
+            </Avatar>
+          </div>
+          <div className="min-w-0 flex-1">
+            <h2 className="font-oxanium truncate text-lg font-semibold tracking-tight text-white">{user.name}</h2>
+            <Link href={`/${user.username}`} className="block">
+              <span className="font-inter text-xs font-medium text-neutral-500 transition-colors hover:text-neutral-300">
+                @{user.username}
+              </span>
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-0.5">
-          <div className="font-oxanium text-lg font-medium tracking-tight text-white">{user.name}</div>
-          <Link href={`/${user.username}`}>
-            <span className="font-inter text-xs text-neutral-500 hover:text-yellow-400">@{user.username}</span>
-          </Link>
-        </div>
-      </div>
-      <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
-      <div className="space-y-3">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <div className="flex size-12 items-center justify-center rounded-md border border-indigo-500/20 bg-indigo-500/10 p-1.5 text-indigo-400">
-              <Avatar className="size-full rounded-none">
+      </motion.div>
+
+      <Separator className="mb-6 border-neutral-800/50" />
+
+      {/* Setup Info Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.3 }}
+        className="mb-6"
+      >
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-neutral-800/50 bg-neutral-900/50 p-2">
+              <Avatar className="size-full rounded">
                 <AvatarImage
                   src={ideMeta?.icon || ''}
                   alt={`${setup.setups.editorName} logo`}
                   title={`${setup.setups.editorName} logo`}
                 />
-                <AvatarFallback>{ideMeta?.label?.charAt(0) || setup.setups.editorName.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="bg-neutral-800 text-xs text-neutral-400">
+                  {ideMeta?.label?.charAt(0) || setup.setups.editorName.charAt(0)}
+                </AvatarFallback>
               </Avatar>
             </div>
-            <div className="flex flex-col items-start gap-1">
-              <h1 className="font-oxanium text-base font-medium text-white">{setup.setups.name}</h1>
-              <Badge variant="outline" className="text-[10px]">
+            <div className="min-w-0 flex-1">
+              <h1 className="font-oxanium truncate text-base font-semibold tracking-tight text-white">
+                {setup.setups.name}
+              </h1>
+              <Badge variant="outline" className="mt-1 text-[10px] font-medium">
                 {ideMeta?.label}
               </Badge>
             </div>
@@ -67,69 +94,101 @@ export const SetupSidebar = ({ setup }: SetupSidebarProps) => {
             showCount={true}
           />
         </div>
-        <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
-        <div className="flex items-center justify-between">
-          <h2 className="font-oxanium flex items-center gap-2 text-sm font-medium text-white">
-            <Palette className="h-4 w-4 text-neutral-500" /> Appearance
-          </h2>
-          <span className="rounded border border-neutral-800 bg-neutral-900 px-2 py-0.5 font-mono text-[10px] text-neutral-500">
-            workbench.colorTheme
-          </span>
+      </motion.div>
+
+      <Separator className="mb-6 border-neutral-800/50" />
+
+      {/* Appearance Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.4 }}
+        className="mb-6"
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h3 className="font-oxanium flex items-center gap-2 text-xs font-semibold tracking-wider text-neutral-400 uppercase">
+            <Palette className="h-3.5 w-3.5" />
+            Appearance
+          </h3>
         </div>
-        <div className="group relative flex flex-col gap-2 rounded-lg border border-neutral-700 bg-neutral-900/40 p-3 transition-all hover:bg-neutral-900/60">
-          <div className="absolute top-0 right-0 p-3 opacity-10 transition-opacity group-hover:opacity-20">
-            <IconBrush className="size-8 text-white" />
+        <div className="space-y-2.5">
+          <div className="group relative overflow-hidden rounded-lg border border-neutral-800/50 bg-neutral-900/30 p-3.5 transition-colors hover:border-neutral-700/50 hover:bg-neutral-900/50">
+            <div className="absolute top-3 right-3 opacity-5 transition-opacity group-hover:opacity-10">
+              <IconBrush className="size-6 text-white" />
+            </div>
+            <Badge variant="progress" className="mb-2 text-[10px] font-medium">
+              Theme
+            </Badge>
+            <p className="font-oxanium text-sm font-medium text-white">{setup.setups.content.theme}</p>
           </div>
-          <Badge variant="progress" className="text-[10px]">
-            Current Theme
-          </Badge>
-          <h3 className="font-oxanium text-base font-medium text-white">{setup.setups.content.theme}</h3>
-        </div>
-        <div className="group relative flex flex-col gap-2 rounded-lg border border-neutral-700 bg-neutral-900/40 p-3 transition-all hover:bg-neutral-900/60">
-          <div className="absolute top-0 right-0 p-3 opacity-10 transition-opacity group-hover:opacity-20">
-            <IconTypography className="size-8 text-white" />
+          <div className="group relative overflow-hidden rounded-lg border border-neutral-800/50 bg-neutral-900/30 p-3.5 transition-colors hover:border-neutral-700/50 hover:bg-neutral-900/50">
+            <div className="absolute top-3 right-3 opacity-5 transition-opacity group-hover:opacity-10">
+              <IconTypography className="size-6 text-white" />
+            </div>
+            <Badge variant="warning" className="mb-2 text-[10px] font-medium">
+              Font
+            </Badge>
+            <p className="font-oxanium text-sm font-medium text-white">{setup.setups.content.fontFamily}</p>
           </div>
-          <Badge variant="warning" className="text-[10px]">
-            Current Font
-          </Badge>
-          <h3 className="font-oxanium text-base font-medium text-white">{setup.setups.content.fontFamily}</h3>
-        </div>
-        <div className="group relative flex flex-col gap-2 rounded-lg border border-neutral-700 bg-neutral-900/40 p-3 transition-all hover:bg-neutral-900/60">
-          <div className="absolute top-0 right-0 p-3 opacity-10 transition-opacity group-hover:opacity-20">
-            <IconTextSize className="size-8 text-white" />
-          </div>
-          <Badge variant="warning" className="text-[10px]">
-            Current Font Size
-          </Badge>
-          <h3 className="font-oxanium text-base font-medium text-white">{setup.setups.content.fontSize}</h3>
-        </div>
-      </div>
-      <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
-      <TabsList className="h-fit w-full flex-col justify-start gap-2 bg-transparent text-start">
-        <TabsTrigger
-          value="settings"
-          className="font-oxanium flex w-full items-center justify-start gap-2 px-3 py-2 text-sm"
-        >
-          <Sliders className="h-3.5 w-3.5 text-blue-400" />
-          Settings
-        </TabsTrigger>
-        <TabsTrigger
-          value="extensions"
-          className="font-oxanium flex w-full items-center justify-start gap-2 px-3 py-2 text-sm"
-        >
-          <Blocks className="h-3.5 w-3.5" />
-          Extensions <span className="ml-auto text-blue-400">{setup.setups.content.extensions?.length ?? 0}</span>
-        </TabsTrigger>
-      </TabsList>
-      <div className="mt-auto border-t border-neutral-800 pt-6">
-        <div className="rounded border border-neutral-800 bg-neutral-900 p-3">
-          <div className="mb-2 text-[10px] font-medium text-neutral-500 uppercase">Last synced</div>
-          <div className="flex items-center gap-2 text-xs text-green-400">
-            <CircleCheck className="h-3 w-3" />{' '}
-            {formatDistanceToNow(new Date(setup.setups.updatedAt), { addSuffix: true })}
+          <div className="group relative overflow-hidden rounded-lg border border-neutral-800/50 bg-neutral-900/30 p-3.5 transition-colors hover:border-neutral-700/50 hover:bg-neutral-900/50">
+            <div className="absolute top-3 right-3 opacity-5 transition-opacity group-hover:opacity-10">
+              <IconTextSize className="size-6 text-white" />
+            </div>
+            <Badge variant="warning" className="mb-2 text-[10px] font-medium">
+              Size
+            </Badge>
+            <p className="font-oxanium text-sm font-medium text-white">{setup.setups.content.fontSize}</p>
           </div>
         </div>
-      </div>
+      </motion.div>
+
+      <Separator className="mb-6 border-neutral-800/50" />
+
+      {/* Navigation Tabs */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.5 }}
+        className="mb-6"
+      >
+        <TabsList className="h-fit w-full flex-col gap-1.5 bg-transparent p-0">
+          <TabsTrigger
+            value="settings"
+            className="font-oxanium w-full justify-start gap-2.5 rounded-lg border border-transparent px-3.5 py-2.5 text-sm font-medium transition-all data-[state=active]:border-neutral-800/50 data-[state=active]:bg-neutral-900/50"
+          >
+            <Sliders className="h-3.5 w-3.5 shrink-0" />
+            <span>Settings</span>
+          </TabsTrigger>
+          <TabsTrigger
+            value="extensions"
+            className="font-oxanium w-full justify-start gap-2.5 rounded-lg border border-transparent px-3.5 py-2.5 text-sm font-medium transition-all data-[state=active]:border-neutral-800/50 data-[state=active]:bg-neutral-900/50"
+          >
+            <Blocks className="h-3.5 w-3.5 shrink-0" />
+            <span>Extensions</span>
+            <span className="ml-auto rounded-full bg-neutral-800/50 px-1.5 py-0.5 text-[10px] font-medium text-neutral-400">
+              {setup.setups.content.extensions?.length ?? 0}
+            </span>
+          </TabsTrigger>
+        </TabsList>
+      </motion.div>
+
+      {/* Footer */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, delay: 0.6 }}
+        className="mt-auto"
+      >
+        <div className="rounded-lg border border-neutral-800/50 bg-neutral-900/30 p-3.5">
+          <div className="font-inter mb-1.5 text-[10px] font-semibold tracking-wider text-neutral-500 uppercase">
+            Last synced
+          </div>
+          <div className="font-inter flex items-center gap-2 text-xs font-medium text-green-400/90">
+            <CircleCheck className="h-3 w-3 shrink-0" />
+            <span>{formatDistanceToNow(new Date(setup.setups.updatedAt), { addSuffix: true })}</span>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 };

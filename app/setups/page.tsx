@@ -26,7 +26,7 @@ export const metadata = constructMetadata(siteConfig, {
 
 export default function SetupsPage() {
   return (
-    <>
+    <main className="mx-auto w-full py-4 md:max-w-7xl md:px-6 md:py-8 lg:px-8">
       <JsonLd
         data={generateWebPageSchema(siteConfig, {
           title: 'Browse IDE Setups',
@@ -35,25 +35,27 @@ export default function SetupsPage() {
           url: '/setups',
         })}
       />
-      <section className="mx-auto max-w-6xl space-y-6">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <section className="w-full px-0">
+        <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="font-oxanium text-2xl leading-tight font-semibold tracking-tight md:text-3xl">
+            <h1 className="font-oxanium mb-2 text-3xl font-semibold tracking-tight text-white md:text-4xl">
               Browse Setups
             </h1>
-            <p className="font-inter mt-1 text-lg leading-relaxed font-light text-neutral-300">
+            <p className="font-inter text-base leading-relaxed text-neutral-400 md:text-lg">
               Discover setups from developers around the world
             </p>
           </div>
-          <UserSearch placeholder="Search by username..." />
+          <div className="shrink-0">
+            <UserSearch placeholder="Search by username..." />
+          </div>
         </div>
-        <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
+        <Separator className="mb-8 border-neutral-800/50" />
 
         {/* Public Setups Grid with Suspense */}
         <Suspense fallback={<ExploreSetupsSkeleton count={6} />}>
           <ExploreSetupsLoader />
         </Suspense>
       </section>
-    </>
+    </main>
   );
 }

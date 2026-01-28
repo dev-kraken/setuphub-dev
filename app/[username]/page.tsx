@@ -95,9 +95,9 @@ const Page = async ({ params }: PageProps) => {
           }),
         ]}
       />
-      <section className="mx-auto max-w-6xl space-y-6">
+      <section className="mx-auto w-full py-8 md:max-w-7xl md:px-6 lg:px-8">
         <UserInfo user={profileUser} stats={stats} />
-        <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
+        <Separator className="my-8 border-neutral-800/50" />
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {userSetups && userSetups.length > 0 ? (
             userSetups.map((setup) => <PublicSetupCard key={setup.setups.id} setup={setup} />)

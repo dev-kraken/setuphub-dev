@@ -52,6 +52,7 @@ interface PublicSetupCardProps {
 
 /**
  * PublicSetupCard - Displays a setup card with user info for public viewing.
+ * Refined editorial design with improved typography, spatial composition, and visual details.
  * Used on the homepage, explore page, and user profile pages.
  */
 const PublicSetupCard = ({ setup }: PublicSetupCardProps) => {
@@ -80,119 +81,139 @@ const PublicSetupCard = ({ setup }: PublicSetupCardProps) => {
 
   const ideMeta = getIdeMeta(setup.setups.editorName);
   const editorName = ideMeta?.label;
+
   return (
     <article
       className={[
-        'group relative flex flex-col overflow-hidden rounded-xl border border-white/5 bg-[#0F0F0F]',
-        'transition-all duration-300 hover:border-white/20 hover:shadow-2xl hover:shadow-orange-500/10',
+        'group relative flex flex-col overflow-hidden rounded-xl border border-neutral-800/50 bg-[#0F0F0F]/50 backdrop-blur-sm',
+        'transition-all duration-300 hover:border-neutral-700/50 hover:bg-[#0F0F0F]/70 hover:shadow-2xl hover:shadow-black/50',
       ].join(' ')}
       aria-label={setup.setups.name}
     >
       {/* Top decorative header */}
-      <div className="relative h-24 overflow-hidden bg-[#282828]">
+      <div className="relative h-28 overflow-hidden bg-neutral-900/50">
         <PatternBackground seed={String(setup.setups.id)} />
-        <div className="absolute right-3 bottom-3 flex gap-2">
-          <div className="flex items-center gap-1.5 rounded-md border border-white/10 bg-black/60 px-2 py-1 backdrop-blur-md">
-            <IconCode className="size-4 text-[#fabd2f]" />
-            <span className="text-[10px] font-medium text-neutral-300">{editorName}</span>
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-neutral-900/20" />
+        <div className="absolute right-4 bottom-4 flex gap-2">
+          <div className="flex items-center gap-2 rounded-lg border border-neutral-800/50 bg-neutral-900/90 px-3 py-1.5 shadow-lg ring-1 ring-white/5 backdrop-blur-sm">
+            <IconCode className="size-3.5 shrink-0 text-yellow-400" />
+            <span className="font-oxanium text-[10px] font-semibold tracking-wider text-neutral-300 uppercase">
+              {editorName}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="relative flex flex-1 flex-col space-y-4 p-5">
+      <div className="relative flex flex-1 flex-col p-6">
         {/* Avatar */}
-        <div className="-mt-12 mb-3 size-16 overflow-hidden rounded-full border-2 border-[#0F0F0F] bg-[#282828]">
-          <Avatar className="size-full rounded-full border border-neutral-700 shadow-md grayscale transition-all group-hover:grayscale-0">
+        <div className="-mt-14 mb-4 size-16 shrink-0 overflow-hidden rounded-full border-2 border-[#0F0F0F] bg-neutral-900/50 ring-2 ring-neutral-900/50">
+          <Avatar className="size-full rounded-full border border-neutral-800/50 shadow-lg grayscale transition-all group-hover:grayscale-0">
             <AvatarImage
               src={userImage}
               alt={userName || userUsername || 'User avatar'}
               title={userName || userUsername || 'User avatar'}
               loading="lazy"
             />
-            <AvatarFallback>{userInitial}</AvatarFallback>
+            <AvatarFallback className="bg-neutral-800 font-medium text-neutral-300">{userInitial}</AvatarFallback>
           </Avatar>
         </div>
 
         {/* Header: title + editor name */}
-        <header className="flex items-start justify-between">
-          <div>
-            <h2 className="font-oxanium text-lg font-medium text-neutral-200">{setup.setups.name}</h2>
+        <header className="mb-5 flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <h2 className="font-oxanium mb-1.5 line-clamp-2 text-lg font-semibold tracking-tight text-white">
+              {setup.setups.name}
+            </h2>
             {userUsername && (
               <Link
                 href={`/${userUsername}`}
-                className="flex items-center gap-1"
+                className="inline-flex items-center gap-1 transition-colors hover:opacity-80"
                 title="View User Profile"
                 aria-label="View User Profile"
               >
                 <span className="sr-only">{editorName} Setup </span>
-                <h3 className="font-inter text-xs text-neutral-500">
-                  by <span className="font-inter text-xs text-neutral-500 hover:text-yellow-400">@{userUsername}</span>
-                </h3>
+                <span className="font-inter text-xs font-medium text-neutral-500">
+                  by <span className="text-neutral-400">@{userUsername}</span>
+                </span>
               </Link>
             )}
           </div>
-          <StarButton
-            setupId={setup.setups.id}
-            initialIsStarred={setup.starData?.isStarred}
-            initialStarCount={setup.starData?.starCount}
-          />
+          <div className="shrink-0">
+            <StarButton
+              setupId={setup.setups.id}
+              initialIsStarred={setup.starData?.isStarred}
+              initialStarCount={setup.starData?.starCount}
+            />
+          </div>
         </header>
 
         {/* Setup details */}
-        <section aria-label="IDE configuration details" className="space-y-2 text-xs text-neutral-400">
+        <section aria-label="IDE configuration details" className="mb-5 space-y-3">
           {/* Theme */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${indicatorColors.theme}`} aria-hidden="true" />
-              <p>Theme:</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${indicatorColors.theme} ring-2 ring-neutral-900/50`}
+                aria-hidden="true"
+              />
+              <span className="font-inter text-xs font-medium text-neutral-500">Theme</span>
             </div>
-            <span className="max-w-[60%] truncate text-right text-neutral-200">{theme}</span>
+            <span className="font-oxanium truncate text-right text-xs font-medium text-neutral-200">{theme}</span>
           </div>
 
-          <Separator className="h-0 border-t border-dashed border-neutral-800/50 bg-transparent" />
+          <Separator className="border-neutral-800/50" />
 
           {/* Font */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${indicatorColors.font}`} aria-hidden="true" />
-              <p>Font:</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${indicatorColors.font} ring-2 ring-neutral-900/50`}
+                aria-hidden="true"
+              />
+              <span className="font-inter text-xs font-medium text-neutral-500">Font</span>
             </div>
-            <span className="max-w-[60%] truncate text-right text-neutral-200">{fontFamily}</span>
+            <span className="font-oxanium truncate text-right text-xs font-medium text-neutral-200">{fontFamily}</span>
           </div>
 
-          <Separator className="h-0 border-t border-dashed border-neutral-800/50 bg-transparent" />
+          <Separator className="border-neutral-800/50" />
 
           {/* Font size */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <span className={`h-2 w-2 rounded-full ${indicatorColors.fontSize}`} aria-hidden="true" />
-              <p>Font Size:</p>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <span
+                className={`h-2 w-2 shrink-0 rounded-full ${indicatorColors.fontSize} ring-2 ring-neutral-900/50`}
+                aria-hidden="true"
+              />
+              <span className="font-inter text-xs font-medium text-neutral-500">Size</span>
             </div>
-            <span className="max-w-[60%] truncate text-right text-neutral-200">{fontSize}</span>
+            <span className="font-oxanium truncate text-right text-xs font-medium text-neutral-200">{fontSize}</span>
           </div>
         </section>
 
-        <Separator className="mx-auto h-0 w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
+        <Separator className="mb-4 border-neutral-800/50" />
 
         {/* Footer */}
-        <footer className="flex items-center justify-between">
+        <footer className="flex items-center justify-between gap-4">
           {updatedAt ? (
-            <time className="text-[10px] leading-none text-green-400" dateTime={updatedAt.toISOString()}>
+            <time
+              className="font-inter text-[10px] leading-none font-medium text-green-400/90"
+              dateTime={updatedAt.toISOString()}
+            >
               Updated {updatedLabel}
             </time>
           ) : (
-            <span className="text-[10px] text-neutral-600">Updated {updatedLabel}</span>
+            <span className="font-inter text-[10px] font-medium text-neutral-600">Updated {updatedLabel}</span>
           )}
 
           <Link
-            className="group flex items-center gap-1 text-[10px] leading-none font-medium text-orange-400 hover:text-orange-300 hover:no-underline"
+            className="group/link font-oxanium inline-flex items-center gap-1.5 text-[10px] font-semibold tracking-wider text-orange-400/90 uppercase transition-all hover:text-orange-300 hover:no-underline"
             href={`/${userUsername}/${setup.setups.id}`}
             target="_self"
             title="View Configuration"
             aria-label="View Configuration"
           >
-            View <span className="sr-only">{editorName}</span> Config
-            <IconArrowRight className="size-3" />
+            <span>View Config</span>
+            <IconArrowRight className="size-3 transition-transform group-hover/link:translate-x-0.5" />
           </Link>
         </footer>
       </div>

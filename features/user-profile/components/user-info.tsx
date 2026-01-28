@@ -1,4 +1,7 @@
+'use client';
+
 import { IconBox, IconBrandGithub, IconBrandLinkedin, IconBrandX, IconStar, IconWorld } from '@tabler/icons-react';
+import { motion } from 'motion/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -43,63 +46,83 @@ function formatCount(count: number): string {
 // Component
 // ============================================================================
 
+/**
+ * UserInfo component displaying user profile information.
+ * Refined editorial design with load animations.
+ */
 const UserInfo = ({ user, stats }: UserInfoProps) => {
   const userInitial = user.name?.[0] ?? user.username?.[0] ?? '?';
 
   return (
-    <div className="grid grid-cols-1 items-center gap-5 py-5 md:grid-cols-3">
+    <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-3">
       {/* User Profile Section */}
-      <div className="col-span-2 flex flex-1 items-start gap-6">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="col-span-2 flex flex-1 items-start gap-6"
+      >
         {/* Avatar */}
-        <div className="group relative cursor-pointer">
-          <div className="size-20 overflow-hidden rounded-full border-4 border-[#111] bg-neutral-800 shadow-2xl transition-transform group-hover:scale-105 md:h-28 md:w-28">
-            <Avatar className="size-full object-cover">
-              <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} />
-              <AvatarFallback>{userInitial}</AvatarFallback>
-            </Avatar>
-          </div>
+        <div className="relative shrink-0">
+          <div className="absolute inset-0 rounded-full bg-neutral-800/50 blur-md" />
+          <Avatar className="relative size-20 rounded-full border-2 border-neutral-800/50 ring-2 ring-neutral-900/50 md:size-28">
+            <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} />
+            <AvatarFallback className="bg-neutral-800 text-lg text-neutral-300 md:text-2xl">
+              {userInitial}
+            </AvatarFallback>
+          </Avatar>
           <div
-            className="absolute right-2 bottom-1 h-5 w-5 rounded-full border-4 border-[#111] bg-emerald-500"
+            className="absolute right-1 bottom-1 h-4 w-4 rounded-full border-2 border-[#0A0A0A] bg-emerald-500 md:right-2 md:bottom-2 md:h-5 md:w-5"
             title="Online"
             aria-label="Online status"
           />
         </div>
 
         {/* User Details */}
-        <div className="pt-1">
-          <div className="mb-1 flex items-center gap-3">
-            <h1 className="font-oxanium text-2xl leading-tight font-semibold tracking-tight text-white">{user.name}</h1>
+        <div className="min-w-0 flex-1 pt-1">
+          <div className="mb-2">
+            <h1 className="font-oxanium mb-1 text-2xl font-semibold tracking-tight text-white md:text-3xl">
+              {user.name}
+            </h1>
+            <h2 className="font-inter text-sm font-medium text-neutral-400 md:text-base">@{user.username}</h2>
           </div>
-          <h2 className="font-inter text-base leading-relaxed font-light text-neutral-300">@{user.username}</h2>
 
           {/* Bio */}
           {user.profile?.bio && (
-            <p className="font-inter mb-3 max-w-md text-sm leading-relaxed text-neutral-400">{user.profile.bio}</p>
+            <p className="font-inter mb-4 max-w-lg text-sm leading-relaxed text-neutral-400 md:text-base">
+              {user.profile.bio}
+            </p>
           )}
 
           {/* Social Links */}
-          <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+          <div className="flex flex-wrap items-center gap-2">
             {/* GitHub - always shown */}
             <a
               href={`https://github.com/${user.username}`}
-              className="group/link flex items-center gap-1.5 rounded-md border border-white/5 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-white/10 hover:text-white"
+              className="group/link inline-flex items-center gap-1.5 rounded-lg border border-neutral-800/50 bg-neutral-900/30 px-3 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 hover:text-white"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <IconBrandGithub className="size-3.5 transition-colors group-hover/link:text-white" aria-hidden="true" />
-              {user.username}
+              <IconBrandGithub
+                className="size-3.5 shrink-0 transition-colors group-hover/link:text-white"
+                aria-hidden="true"
+              />
+              <span>{user.username}</span>
             </a>
 
             {/* Website */}
             {user.profile?.websiteUrl && (
               <a
                 href={user.profile.websiteUrl}
-                className="group/link flex items-center gap-1.5 rounded-md border border-white/5 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-white/10 hover:text-white"
+                className="group/link inline-flex items-center gap-1.5 rounded-lg border border-neutral-800/50 bg-neutral-900/30 px-3 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 hover:text-white"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <IconWorld className="size-3.5 transition-colors group-hover/link:text-white" aria-hidden="true" />
-                Website
+                <IconWorld
+                  className="size-3.5 shrink-0 transition-colors group-hover/link:text-white"
+                  aria-hidden="true"
+                />
+                <span>Website</span>
               </a>
             )}
 
@@ -107,12 +130,15 @@ const UserInfo = ({ user, stats }: UserInfoProps) => {
             {user.profile?.twitterUsername && (
               <a
                 href={`https://x.com/${user.profile.twitterUsername}`}
-                className="group/link flex items-center gap-1.5 rounded-md border border-white/5 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-white/10 hover:text-white"
+                className="group/link inline-flex items-center gap-1.5 rounded-lg border border-neutral-800/50 bg-neutral-900/30 px-3 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 hover:text-white"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <IconBrandX className="size-3.5 transition-colors group-hover/link:text-white" aria-hidden="true" />@
-                {user.profile.twitterUsername}
+                <IconBrandX
+                  className="size-3.5 shrink-0 transition-colors group-hover/link:text-white"
+                  aria-hidden="true"
+                />
+                <span>@{user.profile.twitterUsername}</span>
               </a>
             )}
 
@@ -120,45 +146,68 @@ const UserInfo = ({ user, stats }: UserInfoProps) => {
             {user.profile?.linkedinUrl && (
               <a
                 href={user.profile.linkedinUrl}
-                className="group/link flex items-center gap-1.5 rounded-md border border-white/5 bg-white/5 px-2.5 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-white/10 hover:text-white"
+                className="group/link inline-flex items-center gap-1.5 rounded-lg border border-neutral-800/50 bg-neutral-900/30 px-3 py-1.5 text-xs font-medium text-neutral-400 transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 hover:text-white"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <IconBrandLinkedin
-                  className="size-3.5 transition-colors group-hover/link:text-white"
+                  className="size-3.5 shrink-0 transition-colors group-hover/link:text-white"
                   aria-hidden="true"
                 />
-                LinkedIn
+                <span>LinkedIn</span>
               </a>
             )}
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Stats Section */}
-      <div className="flex w-full items-center gap-3 md:w-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        className="flex w-full gap-3 md:w-auto md:flex-col"
+      >
         {/* Setups Count */}
-        <div className="group/stat min-w-[120px] flex-1 cursor-default rounded-xl border border-white/5 px-5 py-3 backdrop-blur-sm transition-colors hover:bg-white/4 md:flex-none">
-          <div className="mb-1.5 flex items-center gap-2 text-neutral-500">
-            <IconBox size={14} className="text-neutral-600 transition-colors group-hover/stat:text-white" />
-            <span className="text-[10px] font-semibold tracking-wider uppercase">Setups</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="group/stat min-w-[140px] flex-1 cursor-default rounded-xl border border-neutral-800/50 bg-neutral-900/30 p-5 backdrop-blur-sm transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 md:flex-none"
+        >
+          <div className="mb-2 flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-lg border border-neutral-800/50 bg-neutral-900/50">
+              <IconBox size={14} className="text-neutral-400 transition-colors group-hover/stat:text-white" />
+            </div>
+            <span className="font-inter text-[10px] font-semibold tracking-wider text-neutral-500 uppercase">
+              Setups
+            </span>
           </div>
-          <div className="text-2xl font-medium tracking-tight text-white transition-colors group-hover/stat:text-white">
+          <div className="font-oxanium text-2xl font-semibold tracking-tight text-white transition-colors group-hover/stat:text-white md:text-3xl">
             {formatCount(stats.totalSetups)}
           </div>
-        </div>
+        </motion.div>
 
         {/* Stars Count */}
-        <div className="group/stat min-w-[120px] flex-1 cursor-default rounded-xl border border-white/5 bg-white/2 px-5 py-3 backdrop-blur-sm transition-colors hover:bg-white/4 md:flex-none">
-          <div className="mb-1.5 flex items-center gap-2 text-neutral-500">
-            <IconStar size={14} className="text-neutral-600 transition-colors group-hover/stat:text-yellow-400" />
-            <span className="text-[10px] font-semibold tracking-wider uppercase">Stars</span>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: 0.3 }}
+          className="group/stat min-w-[140px] flex-1 cursor-default rounded-xl border border-neutral-800/50 bg-neutral-900/30 p-5 backdrop-blur-sm transition-all hover:border-neutral-700/50 hover:bg-neutral-900/50 md:flex-none"
+        >
+          <div className="mb-2 flex items-center gap-2">
+            <div className="flex size-8 items-center justify-center rounded-lg border border-neutral-800/50 bg-neutral-900/50">
+              <IconStar size={14} className="text-neutral-400 transition-colors group-hover/stat:text-yellow-400" />
+            </div>
+            <span className="font-inter text-[10px] font-semibold tracking-wider text-neutral-500 uppercase">
+              Stars
+            </span>
           </div>
-          <div className="text-2xl font-medium tracking-tight text-white transition-colors group-hover/stat:text-yellow-100">
+          <div className="font-oxanium text-2xl font-semibold tracking-tight text-white transition-colors group-hover/stat:text-yellow-100 md:text-3xl">
             {formatCount(stats.totalStars)}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };
