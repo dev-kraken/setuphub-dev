@@ -7,10 +7,11 @@ import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui/input-group';
 import { Skeleton } from '@/components/ui/skeleton';
-import { cn } from '@/lib/utils';
+import { cn, getInitial } from '@/lib/utils';
+
+import { useDebouncedValue } from '@/lib/hooks/use-debounced-value';
 
 import { type SearchUser, searchUsers } from '../actions/search-users';
-import { useDebounce } from '../hooks/use-debounce';
 
 // ============================================================================
 // Types
@@ -49,7 +50,7 @@ interface SearchResultItemProps {
 }
 
 function SearchResultItem({ user, isHighlighted, onSelect, onMouseEnter }: SearchResultItemProps) {
-  const userInitial = user.name?.[0] ?? user.username?.[0] ?? '?';
+  const userInitial = getInitial(user.name, user.username);
 
   return (
     <Link
@@ -105,7 +106,7 @@ export function UserSearch({ placeholder = 'Search users...', className, onSelec
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedQuery = useDebouncedValue(query, 300);
   const showDropdown = isOpen && query.length >= 2;
 
   // Fetch search results

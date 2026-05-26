@@ -1,6 +1,6 @@
 'use client';
 
-import { createElement, memo, useEffect, useRef } from 'react';
+import { createElement, memo, useEffect } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -36,26 +36,13 @@ export const BannerPreview = memo(function BannerPreview({
   const isGoogleFont = !isPresetFont(selectedFont);
   const parsedFooter = parseFooterText(footerLeft);
 
-  // Track mounted state to prevent state updates after unmount
-  const isMountedRef = useRef(true);
-
-  // Load Google Font if needed with cleanup
   useEffect(() => {
-    isMountedRef.current = true;
-
-    if (isGoogleFont && selectedFont) {
-      loadFont(selectedFont).then((result) => {
-        // Only log errors if component is still mounted
-        if (isMountedRef.current && !result.success) {
-          console.error('Failed to load font:', result.error);
-        }
-      });
-    }
-
-    // Cleanup: mark as unmounted to prevent stale updates
-    return () => {
-      isMountedRef.current = false;
-    };
+    if (!isGoogleFont || !selectedFont) return;
+    loadFont(selectedFont).then((result) => {
+      if (!result.success) {
+        console.error('Failed to load font:', result.error);
+      }
+    });
   }, [isGoogleFont, selectedFont]);
 
   return (

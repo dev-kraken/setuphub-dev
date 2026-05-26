@@ -13,8 +13,9 @@ export const metadata = constructMetadata(siteConfig, {
   title: 'Dashboard',
   description:
     'Control your SetupHub dashboard with ease. Manage access tokens, sync settings, and keep your IDE setup up to date and shareable worldwide.',
+  // noIndex pages don't benefit from canonical — Google ignores it.
   noIndex: true,
-  canonical: '/dashboard',
+  noFollow: true,
 });
 
 export default async function Dashboard() {

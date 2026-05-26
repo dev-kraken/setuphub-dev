@@ -33,7 +33,8 @@ export async function getUserProfile(): Promise<GetProfileResponse> {
       success: true,
       data: profile ?? null,
     };
-  } catch {
+  } catch (error) {
+    console.error('getUserProfile failed:', error);
     return {
       success: false,
       error: 'Failed to fetch profile',
@@ -95,7 +96,8 @@ export async function updateUserProfile(input: UpdateProfileInput): Promise<Upda
       success: true,
       data: upsertedProfile,
     };
-  } catch {
+  } catch (error) {
+    console.error('updateUserProfile failed:', error);
     return {
       success: false,
       error: 'Failed to update profile',

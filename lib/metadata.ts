@@ -1,5 +1,13 @@
 import type { Metadata, Viewport } from 'next';
-import type { Organization, Person, Product, WebPage, WebSite, WithContext } from 'schema-dts';
+import type {
+  BreadcrumbList,
+  CreativeWork,
+  Organization,
+  Person,
+  WebPage,
+  WebSite,
+  WithContext,
+} from 'schema-dts';
 
 // ============================================================================
 // TYPES
@@ -83,8 +91,9 @@ export type StructuredDataType =
   | WithContext<WebPage>
   | WithContext<WebSite>
   | WithContext<Organization>
-  | WithContext<Product>
-  | WithContext<Person>;
+  | WithContext<CreativeWork>
+  | WithContext<Person>
+  | WithContext<BreadcrumbList>;
 
 // ============================================================================
 // UTILITIES
@@ -283,6 +292,40 @@ export function generateWebSiteSchema(config: SiteConfig): WithContext<WebSite> 
     url: baseUrl,
     description: config.description,
     inLanguage: config.locale ?? 'en',
+    // Enables Google's sitelinks search box for the site in SERPs.
+    // See https://developers.google.com/search/docs/appearance/structured-data/sitelinks-searchbox
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: {
+        '@type': 'EntryPoint',
+        urlTemplate: `${baseUrl}/setups?q={search_term_string}`,
+      },
+      // `query-input` is required by the spec but rejected by schema-dts' types;
+      // cast keeps the JSON-LD valid without weakening the surrounding typing.
+      'query-input': 'required name=search_term_string',
+    } as WebSite['potentialAction'],
+  };
+}
+
+export interface BreadcrumbItem {
+  name: string;
+  url: string;
+}
+
+export function generateBreadcrumbSchema(
+  siteConfig: SiteConfig,
+  items: BreadcrumbItem[],
+): WithContext<BreadcrumbList> {
+  const baseUrl = normalizeBaseUrl(siteConfig.url);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: items.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      item: item.url.startsWith('http') ? item.url : `${baseUrl}${item.url}`,
+    })),
   };
 }
 
@@ -332,9 +375,9 @@ export function generatePersonSchema(
 
   const sameAs: string[] = [];
   if (params.websiteUrl) sameAs.push(params.websiteUrl);
-  if (params.twitterUsername) sameAs.push(`https://x.com/${params.twitterUsername}`);
+  if (params.twitterUsername) sameAs.push(`https://x.com/${encodeURIComponent(params.twitterUsername)}`);
   if (params.linkedinUrl) sameAs.push(params.linkedinUrl);
-  sameAs.push(`https://github.com/${params.username}`);
+  sameAs.push(`https://github.com/${encodeURIComponent(params.username)}`);
 
   return {
     '@context': 'https://schema.org',
@@ -360,6 +403,7 @@ export function generateSetupSchema(
     url: string;
     authorName: string;
     authorUrl: string;
+    authorUsername: string;
     editorName: string;
     editorLabel: string;
     createdAt: string;
@@ -367,32 +411,57 @@ export function generateSetupSchema(
     image?: string | null;
     starCount?: number;
   },
-): WithContext<Product> {
+): WithContext<CreativeWork> {
   const baseUrl = normalizeBaseUrl(siteConfig.url);
   const setupUrl = `${baseUrl}${params.url}`;
+  const authorUrl = params.authorUrl.startsWith('http') ? params.authorUrl : `${baseUrl}${params.authorUrl}`;
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'Product',
+    // CreativeWork models a user-shared editor configuration far more accurately
+    // than Product (no offers, no price, no rating). InteractionCounter captures
+    // the real "stars" signal without claiming a fake aggregateRating.
+    '@type': 'CreativeWork',
     name: params.name,
-    description: params.description || `${params.name} - ${params.editorLabel} setup configuration`,
+    description: params.description || `${params.name} — ${params.editorLabel} setup configuration on SetupHub.`,
     url: setupUrl,
     ...(params.image && { image: params.image.startsWith('http') ? params.image : `${baseUrl}${params.image}` }),
-    brand: {
-      '@type': 'Brand',
-      name: params.editorLabel,
+    inLanguage: siteConfig.locale ?? 'en',
+    datePublished: params.createdAt,
+    ...(params.updatedAt && { dateModified: params.updatedAt }),
+    author: {
+      '@type': 'Person',
+      name: params.authorName,
+      url: authorUrl,
+      identifier: params.authorUsername,
     },
-    category: 'Software Configuration',
-    ...(params.starCount !== undefined && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: params.starCount > 0 ? '5' : '0',
-        ratingCount: params.starCount,
-      },
-    }),
+    creator: {
+      '@type': 'Person',
+      name: params.authorName,
+      url: authorUrl,
+    },
+    about: {
+      '@type': 'SoftwareApplication',
+      name: params.editorLabel,
+      applicationCategory: 'DeveloperApplication',
+    },
+    keywords: ['ide setup', 'editor configuration', params.editorLabel.toLowerCase(), params.editorName],
+    ...(typeof params.starCount === 'number' &&
+      params.starCount > 0 && {
+        interactionStatistic: {
+          '@type': 'InteractionCounter',
+          interactionType: { '@type': 'LikeAction' },
+          userInteractionCount: params.starCount,
+        },
+      }),
   };
 }
 
 export function sanitizeJsonLd(data: StructuredDataType): string {
-  return JSON.stringify(data).replace(/</g, '\\u003c');
+  // Escape `<` (covers `</script>` breakouts) and U+2028/U+2029 (line/paragraph
+  // separators that are valid in JSON strings but illegal inside an inline <script>).
+  return JSON.stringify(data)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
 }

@@ -35,7 +35,9 @@ export async function verifyAuth(req: Request) {
           .set({ lastUsedAt: new Date() })
           .where(eq(personalAccessTokens.id, pat.id))
           .execute()
-          .catch(() => {});
+          .catch((error) => {
+            console.error('Failed to update PAT lastUsedAt:', error);
+          });
 
         // If relation isn't set up yet, fetch user manually
         const dbUser =
@@ -60,8 +62,8 @@ export async function verifyAuth(req: Request) {
           };
         }
       }
-    } catch {
-      // PAT verification failed
+    } catch (error) {
+      console.error('PAT verification failed:', error);
     }
   }
 

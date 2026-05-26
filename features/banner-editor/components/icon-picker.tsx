@@ -46,7 +46,7 @@ const IconButton = React.memo(function IconButton({
     <button
       onClick={onSelect}
       className={cn(
-        'flex h-10 w-10 items-center justify-center rounded-lg transition-all duration-150',
+        'flex size-10 items-center justify-center rounded-lg transition-all duration-150',
         'focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none',
         isSelected
           ? 'bg-primary text-primary-foreground shadow-md'
@@ -86,7 +86,7 @@ function IconCell({
   if (!icon) return null;
 
   return (
-    <div style={style} className="flex items-center justify-center p-1 w-full h-full">
+    <div style={style} className="flex size-full items-center justify-center p-1">
       <IconButton
         icon={icon}
         isSelected={selectedValue === icon.name}
@@ -163,7 +163,7 @@ export function IconPicker({ value, onChange, className }: IconPickerProps) {
             {SelectedIconComp && <SelectedIconComp size={20} stroke={1.5} className="text-muted-foreground" />}
             <span className="truncate">{selectedIcon?.name ?? 'Select icon...'}</span>
           </div>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 w-(--radix-popover-trigger-width)" align="start">
@@ -178,23 +178,25 @@ export function IconPicker({ value, onChange, className }: IconPickerProps) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="hover:bg-accent flex h-8 items-center gap-2 px-2">
-                  <Filter className="text-muted-foreground h-4 w-4" />
-                  <span className="text-sm capitalize font-oxanium font-medium">{selectedCategory === 'all' ? 'All' : selectedCategory}</span>
-                  <ChevronsUpDown className="ml-1 h-3 w-3 opacity-50" />
+                  <Filter className="text-muted-foreground size-4" />
+                  <span className="font-oxanium text-sm font-medium capitalize">
+                    {selectedCategory === 'all' ? 'All' : selectedCategory}
+                  </span>
+                  <ChevronsUpDown className="ml-1 size-3 opacity-50" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-40">
                 <DropdownMenuRadioGroup value={selectedCategory} onValueChange={setSelectedCategory}>
                   <DropdownMenuRadioItem value="all">All Categories</DropdownMenuRadioItem>
                   {ICON_CATEGORIES.map((category) => (
-                    <DropdownMenuRadioItem key={category} value={category} className="capitalize font-oxanium font-medium">
+                    <DropdownMenuRadioItem key={category} value={category} className="font-oxanium font-medium capitalize">
                       {category}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            <span className="text-muted-foreground text-xs font-oxanium font-medium">{filteredIcons.length} icons</span>
+            <span className="text-muted-foreground font-oxanium text-xs font-medium">{filteredIcons.length} icons</span>
           </div>
           {filteredIcons.length === 0 ? (
             <CommandEmpty>No icons found.</CommandEmpty>
@@ -219,8 +221,8 @@ export function IconPicker({ value, onChange, className }: IconPickerProps) {
         {/* Selected icon indicator */}
         {value && (
           <div className="flex items-center gap-2 border-t px-3 py-2">
-            <Check className="h-3.5 w-3.5 text-green-500" />
-            <span className="text-muted-foreground text-xs font-oxanium font-medium">Selected: {value}</span>
+            <Check className="size-3.5 text-green-500" />
+            <span className="text-muted-foreground font-oxanium text-xs font-medium">Selected: {value}</span>
           </div>
         )}
       </PopoverContent>

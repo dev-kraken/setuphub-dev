@@ -26,6 +26,7 @@ let cachedEnv: ClientEnv | null = null;
 const clientEnvVars = {
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+  NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
 } as const;
 
 /**

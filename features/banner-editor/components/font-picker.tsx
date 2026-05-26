@@ -20,14 +20,16 @@ import { getGoogleFonts } from '../actions/fonts';
 import type { GoogleFont } from '../lib/fonts';
 import { loadFont } from '../lib/fonts';
 
-/** Props for a single font list item */
+const DEFAULT_WIDTH = 300;
+const DEFAULT_HEIGHT = 300;
+const ROW_HEIGHT = 55;
+
 interface FontListItemProps {
   font: GoogleFont;
   isSelected: boolean;
   onSelect: () => void;
 }
 
-/** Props passed to each row in the virtualized list */
 interface FontRowProps {
   index: number;
   style: React.CSSProperties;
@@ -39,19 +41,18 @@ interface FontRowProps {
 }
 
 function FontListItem({ font, isSelected, onSelect }: FontListItemProps) {
-  const [isFontLoaded, setIsFontLoaded] = React.useState(false);
+  const [hasFontLoaded, setHasFontLoaded] = React.useState(false);
 
   React.useEffect(() => {
-    if (!isFontLoaded) {
-      loadFont(font.family).then((result) => {
-        if (result.success) {
-          setIsFontLoaded(true);
-        } else {
-          console.error('Failed to load font:', result.error);
-        }
-      });
-    }
-  }, [isFontLoaded, font.family]);
+    if (hasFontLoaded) return;
+    loadFont(font.family).then((result) => {
+      if (result.success) {
+        setHasFontLoaded(true);
+      } else {
+        console.error('Failed to load font:', result.error);
+      }
+    });
+  }, [hasFontLoaded, font.family]);
 
   return (
     <CommandItem
@@ -60,16 +61,16 @@ function FontListItem({ font, isSelected, onSelect }: FontListItemProps) {
       className="data-[selected=true]:bg-accent flex w-full cursor-pointer items-center gap-2 p-2"
       data-selected={isSelected}
     >
-      <Check className={cn('h-3 w-3 shrink-0', isSelected ? 'opacity-100' : 'opacity-0')} />
+      <Check className={cn('size-3 shrink-0', isSelected ? 'opacity-100' : 'opacity-0')} />
       <div className="flex flex-col gap-1">
         <span className="text-sm font-medium">{font.family}</span>
         <span
           className={cn(
             'text-muted-foreground text-xs transition-opacity duration-300',
-            isFontLoaded ? 'opacity-100' : 'opacity-0',
+            hasFontLoaded ? 'opacity-100' : 'opacity-0',
           )}
           style={{
-            fontFamily: isFontLoaded ? font.family : 'system-ui',
+            fontFamily: hasFontLoaded ? font.family : 'system-ui',
           }}
         >
           The quick brown fox
@@ -91,41 +92,47 @@ interface FontPickerProps {
 export function FontPicker({
   onChange,
   value,
-  width = 300,
-  height = 300,
+  width = DEFAULT_WIDTH,
+  height = DEFAULT_HEIGHT,
   className,
   showFilters = true,
 }: FontPickerProps) {
-  const [selectedFont, setSelectedFont] = React.useState<GoogleFont | null>(null);
   const [search, setSearch] = React.useState('');
   const [isOpen, setIsOpen] = React.useState(false);
   const [selectedCategory, setSelectedCategory] = React.useState<string>('all');
   const [fonts, setFonts] = React.useState<GoogleFont[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
 
+  // Fetch the font catalog once; it doesn't depend on the selected value.
   React.useEffect(() => {
-    const loadFonts = async () => {
-      try {
-        setIsLoading(true);
-        const fetchedFonts = await getGoogleFonts();
+    let cancelled = false;
+    setIsLoading(true);
+    getGoogleFonts()
+      .then((fetchedFonts) => {
+        if (cancelled) return;
         setFonts(fetchedFonts);
-        const font = fetchedFonts.find((f) => f.family === value);
-        if (font) {
-          setSelectedFont(font);
-        }
         setError(null);
-      } catch (err) {
-        setError(err instanceof Error ? err : new Error('Failed to load fonts'));
-        console.error('Error loading fonts:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+      })
+      .catch((err: unknown) => {
+        if (cancelled) return;
+        const wrapped = err instanceof Error ? err : new Error('Failed to load fonts');
+        setError(wrapped);
+        console.error('Error loading fonts:', wrapped);
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoading(false);
+      });
 
-    loadFonts();
-  }, [value]);
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selectedFont = React.useMemo(
+    () => (value ? fonts.find((f) => f.family === value) ?? null : null),
+    [fonts, value],
+  );
 
   const categories = React.useMemo(() => {
     const uniqueCategories = new Set(fonts.map((font) => font.category));
@@ -133,8 +140,9 @@ export function FontPicker({
   }, [fonts]);
 
   const filteredFonts = React.useMemo(() => {
+    const query = search.toLowerCase();
     return fonts.filter((font: GoogleFont) => {
-      const matchesSearch = font.family.toLowerCase().includes(search.toLowerCase());
+      const matchesSearch = font.family.toLowerCase().includes(query);
       const matchesCategory = !showFilters || selectedCategory === 'all' || font.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
@@ -142,16 +150,11 @@ export function FontPicker({
 
   const handleSelectFont = React.useCallback(
     (font: GoogleFont) => {
-      setSelectedFont(font);
       onChange?.(font.family);
       setIsOpen(false);
     },
     [onChange],
   );
-
-  const handleOpenChange = React.useCallback((open: boolean) => {
-    setIsOpen(open);
-  }, []);
 
   const RowComponent = React.useCallback(
     ({ index, style, ariaAttributes }: FontRowProps) => {
@@ -171,10 +174,9 @@ export function FontPicker({
   );
 
   return (
-    <Popover open={isOpen} onOpenChange={handleOpenChange}>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button
-          ref={buttonRef}
           variant="outline"
           role="combobox"
           aria-expanded={isOpen}
@@ -182,10 +184,8 @@ export function FontPicker({
           aria-label="Select font"
           className={cn('group relative h-12 w-full justify-between', className)}
         >
-          <span className="truncate font-oxanium text-sm font-medium">
-            {selectedFont?.family ?? 'Select font...'}
-          </span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
+          <span className="font-oxanium truncate text-sm font-medium">{selectedFont?.family ?? 'Select font...'}</span>
+          <ChevronsUpDown className="size-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-(--radix-popover-trigger-width) p-0" align="start" style={{ width, height: '100%' }}>
@@ -194,18 +194,18 @@ export function FontPicker({
             placeholder="Search fonts..."
             value={search}
             onValueChange={setSearch}
-            className="border-none focus:ring-0 font-oxanium text-sm font-medium"
+            className="font-oxanium border-none text-sm font-medium focus:ring-0"
           />
           <div className="flex w-full items-center justify-between gap-2 border-b px-3 py-1">
             {showFilters && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="sm" className="hover:bg-accent flex h-8 w-full items-center gap-2 px-2">
-                    <Filter className="text-muted-foreground h-4 w-4" />
+                    <Filter className="text-muted-foreground size-4" />
                     <span className="text-sm capitalize">
                       {selectedCategory === 'all' ? 'All Categories' : selectedCategory}
                     </span>
-                    <ChevronsUpDown className="ml-2 h-3 w-3 opacity-50" />
+                    <ChevronsUpDown className="ml-2 size-3 opacity-50" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-full">
@@ -224,7 +224,7 @@ export function FontPicker({
           </div>
           {isLoading ? (
             <div className="flex items-center justify-center p-4">
-              <div className="h-4 w-4 animate-spin rounded-full border-b-2 border-gray-900" />
+              <div className="border-primary size-4 animate-spin rounded-full border-b-2" />
             </div>
           ) : error ? (
             <div className="flex items-center justify-center p-4 text-sm text-red-500">
@@ -237,7 +237,7 @@ export function FontPicker({
                 <div style={{ height }}>
                   <List
                     rowCount={filteredFonts.length}
-                    rowHeight={55}
+                    rowHeight={ROW_HEIGHT}
                     rowComponent={RowComponent}
                     rowProps={{}}
                     defaultHeight={height}

@@ -53,6 +53,7 @@ export const serverSchema = z.object({
 export const clientSchema = z.object({
   NODE_ENV: nodeEnv,
   NEXT_PUBLIC_APP_URL: requiredUrl('NEXT_PUBLIC_APP_URL'),
+  NEXT_PUBLIC_GA_ID: z.string().optional(),
 });
 
 // ============================================================================

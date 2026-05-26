@@ -58,12 +58,10 @@ export class BannerEditorErrorBoundary extends Component<
       return (
         <div className="flex min-h-[400px] flex-col items-center justify-center gap-4 rounded-3xl border border-red-500/20 bg-red-500/5 p-8 text-center">
           <div className="rounded-full bg-red-500/10 p-4">
-            <IconAlertTriangle className="h-8 w-8 text-red-400" stroke={2} />
+            <IconAlertTriangle className="size-8 text-red-400" stroke={2} />
           </div>
-          <div className="space-y-2">
-            <h3 className="text-lg font-semibold text-red-400">
-              Something went wrong
-            </h3>
+          <div className="flex flex-col gap-2">
+            <h3 className="text-lg font-semibold text-red-400">Something went wrong</h3>
             <p className="max-w-md text-sm text-neutral-400">
               An error occurred while rendering the banner editor. Please try again.
             </p>

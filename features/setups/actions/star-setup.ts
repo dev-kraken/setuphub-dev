@@ -86,7 +86,8 @@ export async function toggleSetupStar(setupId: string): Promise<StarSetupResult>
       isStarred,
       starCount: newStarCount,
     };
-  } catch {
+  } catch (error) {
+    console.error('toggleSetupStar failed:', error);
     return {
       success: false,
       message: 'Something went wrong. Please try again.',

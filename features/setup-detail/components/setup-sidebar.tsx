@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getIdeMeta } from '@/lib/config/ide-registry';
+import { getInitial } from '@/lib/utils';
 import { type SetupWithUser } from '@/types/setup';
 
 type SetupSidebarProps = {
@@ -40,7 +41,7 @@ export const SetupSidebar = ({ setup }: SetupSidebarProps) => {
             <div className="absolute inset-0 rounded-full bg-neutral-800/50 blur-md" />
             <Avatar className="relative size-16 rounded-full border-2 border-neutral-800/50 ring-2 ring-neutral-900/50">
               <AvatarImage src={user.image || ''} alt={`${user.name}'s avatar`} title={`${user.name}'s avatar`} />
-              <AvatarFallback className="bg-neutral-800 text-neutral-300">{user.name?.[0]}</AvatarFallback>
+              <AvatarFallback className="bg-neutral-800 text-neutral-300">{getInitial(user.name, user.username)}</AvatarFallback>
             </Avatar>
           </div>
           <div className="min-w-0 flex-1">
@@ -73,7 +74,7 @@ export const SetupSidebar = ({ setup }: SetupSidebarProps) => {
                   title={`${setup.setups.editorName} logo`}
                 />
                 <AvatarFallback className="bg-neutral-800 text-xs text-neutral-400">
-                  {ideMeta?.label?.charAt(0) || setup.setups.editorName.charAt(0)}
+                  {getInitial(ideMeta?.label, setup.setups.editorName)}
                 </AvatarFallback>
               </Avatar>
             </div>

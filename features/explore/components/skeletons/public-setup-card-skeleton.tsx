@@ -35,7 +35,7 @@ const PublicSetupCardSkeleton = () => {
           {/* Theme */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="size-2 rounded-full" />
               <Skeleton className="h-3 w-12" />
             </div>
             <Skeleton className="h-3 w-24" />
@@ -46,7 +46,7 @@ const PublicSetupCardSkeleton = () => {
           {/* Font */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="size-2 rounded-full" />
               <Skeleton className="h-3 w-10" />
             </div>
             <Skeleton className="h-3 w-28" />
@@ -57,7 +57,7 @@ const PublicSetupCardSkeleton = () => {
           {/* Font size */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Skeleton className="h-2 w-2 rounded-full" />
+              <Skeleton className="size-2 rounded-full" />
               <Skeleton className="h-3 w-16" />
             </div>
             <Skeleton className="h-3 w-8" />

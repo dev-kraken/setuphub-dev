@@ -62,13 +62,13 @@ export const ContentControls = memo(function ContentControls({
   }, [footerRight, onFooterRightChange]);
 
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <div className="flex justify-between items-center">
-          <Label htmlFor="title-input" className="text-sm font-semibold text-neutral-400 font-oxanium">
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <Label htmlFor="title-input" className="font-oxanium text-sm font-semibold text-neutral-400">
             Title
           </Label>
-          <span className="text-xs text-neutral-500 font-mono">
+          <span className="font-mono text-xs text-neutral-500">
             {title.length}/{TITLE_MAX_LENGTH}
           </span>
         </div>
@@ -78,22 +78,19 @@ export const ContentControls = memo(function ContentControls({
           value={title}
           onChange={handleTitleChange}
           onBlur={handleTitleBlur}
-          className="w-full px-4 py-6 rounded-xl bg-black/20 border border-white/5 text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:border-white/20 outline-none transition-all placeholder:text-neutral-600 text-lg"
+          className="w-full rounded-xl border border-white/5 bg-black/20 px-4 py-6 text-lg text-white outline-none transition-all placeholder:text-neutral-600 focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-white/20"
           placeholder="Banner Title"
           maxLength={TITLE_MAX_LENGTH}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <Label
-              htmlFor="footer-left-input"
-              className="text-sm font-medium text-neutral-400 font-oxanium"
-            >
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="footer-left-input" className="font-oxanium text-sm font-medium text-neutral-400">
               Footer Left
             </Label>
-            <span className="text-[10px] text-neutral-500 font-mono">
+            <span className="font-mono text-[10px] text-neutral-500">
               {footerLeft.length}/{FOOTER_MAX_LENGTH}
             </span>
           </div>
@@ -103,20 +100,17 @@ export const ContentControls = memo(function ContentControls({
             value={footerLeft}
             onChange={handleFooterLeftChange}
             onBlur={handleFooterLeftBlur}
-            className="w-full px-4 py-5 rounded-xl bg-black/20 border border-white/5 text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:border-white/20 outline-none transition-all placeholder:text-neutral-600 text-sm font-mono"
+            className="w-full rounded-xl border border-white/5 bg-black/20 px-4 py-5 font-mono text-sm text-white outline-none transition-all placeholder:text-neutral-600 focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-white/20"
             placeholder=">_ command"
             maxLength={FOOTER_MAX_LENGTH}
           />
         </div>
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <Label
-              htmlFor="footer-right-input"
-              className="text-sm font-medium text-neutral-400 font-oxanium"
-            >
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center justify-between">
+            <Label htmlFor="footer-right-input" className="font-oxanium text-sm font-medium text-neutral-400">
               Footer Right
             </Label>
-            <span className="text-[10px] text-neutral-500 font-mono">
+            <span className="font-mono text-[10px] text-neutral-500">
               {footerRight.length}/{FOOTER_MAX_LENGTH}
             </span>
           </div>
@@ -126,7 +120,7 @@ export const ContentControls = memo(function ContentControls({
             value={footerRight}
             onChange={handleFooterRightChange}
             onBlur={handleFooterRightBlur}
-            className="w-full px-4 py-5 rounded-xl bg-black/20 border border-white/5 text-white focus-visible:ring-2 focus-visible:ring-white/20 focus-visible:border-white/20 outline-none transition-all placeholder:text-neutral-600 text-sm font-mono"
+            className="w-full rounded-xl border border-white/5 bg-black/20 px-4 py-5 font-mono text-sm text-white outline-none transition-all placeholder:text-neutral-600 focus-visible:border-white/20 focus-visible:ring-2 focus-visible:ring-white/20"
             placeholder="#hashtag"
             maxLength={FOOTER_MAX_LENGTH}
           />

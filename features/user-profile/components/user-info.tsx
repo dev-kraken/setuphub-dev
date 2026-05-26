@@ -4,6 +4,7 @@ import { IconBox, IconBrandGithub, IconBrandLinkedin, IconBrandX, IconStar, Icon
 import { motion } from 'motion/react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getInitial } from '@/lib/utils';
 
 import { type UserProfileExtended } from '../actions/get-user-profile';
 import { type UserStats } from '../actions/get-user-stats';
@@ -51,7 +52,7 @@ function formatCount(count: number): string {
  * Refined editorial design with load animations.
  */
 const UserInfo = ({ user, stats }: UserInfoProps) => {
-  const userInitial = user.name?.[0] ?? user.username?.[0] ?? '?';
+  const userInitial = getInitial(user.name, user.username);
 
   return (
     <div className="grid grid-cols-1 items-start gap-8 md:grid-cols-3">

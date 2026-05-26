@@ -2,8 +2,13 @@
 
 import { TerminalSquare } from 'lucide-react';
 import { motion } from 'motion/react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { tomorrow } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { PrismLight as SyntaxHighlighter } from 'react-syntax-highlighter';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+// Register just the JSON grammar — the full `Prism` build ships ~150 KB of
+// unused language definitions.
+SyntaxHighlighter.registerLanguage('json', json);
 
 import { TabsContent } from '@/components/ui/tabs';
 import { type SetupWithUser } from '@/types/setup';

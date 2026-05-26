@@ -1,6 +1,7 @@
 'use client';
 
 import { IconAlertTriangle, IconRefresh } from '@tabler/icons-react';
+import Link from 'next/link';
 import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
@@ -16,7 +17,6 @@ interface ErrorProps {
  */
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Log error to console in development, could send to error reporting service
     console.error('Application error:', error);
   }, [error]);
 
@@ -25,7 +25,7 @@ export default function Error({ error, reset }: ErrorProps) {
       <div className="mx-auto max-w-md text-center">
         <div className="mb-6 flex justify-center">
           <div className="rounded-full bg-red-500/10 p-4">
-            <IconAlertTriangle className="h-12 w-12 text-red-500" />
+            <IconAlertTriangle className="size-12 text-red-500" />
           </div>
         </div>
 
@@ -39,12 +39,12 @@ export default function Error({ error, reset }: ErrorProps) {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Button onClick={reset} className="flex items-center gap-2">
-            <IconRefresh className="h-4 w-4" />
+            <IconRefresh className="size-4" />
             Try Again
           </Button>
 
-          <Button variant="outline" onClick={() => (window.location.href = '/')}>
-            Go Home
+          <Button variant="outline" asChild>
+            <Link href="/">Go Home</Link>
           </Button>
         </div>
       </div>

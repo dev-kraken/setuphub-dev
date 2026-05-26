@@ -19,7 +19,7 @@ const HowItWorksSection = () => {
           />
 
           <li className="group relative flex flex-col items-center text-center">
-            <div className="z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
+            <div className="z-10 mb-4 flex size-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
               <IconBlocks className="size-6" aria-hidden="true" />
             </div>
             <h3 className="font-oxanium mb-2 text-xl leading-tight font-semibold tracking-tight text-white">
@@ -31,7 +31,7 @@ const HowItWorksSection = () => {
           </li>
 
           <li className="group relative flex flex-col items-center text-center">
-            <div className="z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
+            <div className="z-10 mb-4 flex size-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
               <Key className="size-6" aria-hidden="true" />
             </div>
             <h3 className="font-oxanium mb-2 text-xl leading-tight font-semibold tracking-tight text-white">
@@ -47,7 +47,7 @@ const HowItWorksSection = () => {
           </li>
 
           <li className="group relative flex flex-col items-center text-center">
-            <div className="z-10 mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
+            <div className="z-10 mb-4 flex size-12 items-center justify-center rounded-xl border border-neutral-800 bg-neutral-900 text-white shadow-sm transition-colors group-hover:border-neutral-600">
               <IconGlobe className="size-6" aria-hidden="true" />
             </div>
             <h3 className="font-oxanium mb-2 text-xl leading-tight font-semibold tracking-tight text-white">

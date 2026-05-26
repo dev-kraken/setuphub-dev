@@ -95,18 +95,15 @@ export default function StarButton({
 
   const handleToggleStar = () => {
     startTransition(async () => {
-      // Optimistically update the UI
       setOptimisticState(!isStarred);
-
       const result = await toggleSetupStar(setupId);
 
+      // useOptimistic automatically reverts to the real state when the
+      // transition ends, so no manual rollback is needed on failure.
       if (!result.success) {
-        // Revert optimistic update on error
-        setOptimisticState(isStarred);
         toast.error(result.message);
         return;
       }
-
       toast.success(result.message);
     });
   };

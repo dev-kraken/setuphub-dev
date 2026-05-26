@@ -71,7 +71,8 @@ export async function getUserByUsername(username: string): Promise<UserProfile |
       ...foundUser,
       profile: profileData ?? null,
     };
-  } catch {
+  } catch (error) {
+    console.error('getUserByUsername failed:', error);
     return null;
   }
 }
@@ -127,7 +128,8 @@ export async function getSetupsByUsername(username: string): Promise<SetupWithUs
         starCount: setup.setups.starCount,
       },
     }));
-  } catch {
+  } catch (error) {
+    console.error('getSetupsByUsername failed:', error);
     return [];
   }
 }

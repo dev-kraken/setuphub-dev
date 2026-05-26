@@ -13,9 +13,9 @@ interface TokenDisplayProps {
 
 export const TokenDisplay = ({ tokenId, createdAt, lastUsedAt }: TokenDisplayProps) => {
   return (
-    <div className="space-y-3">
+    <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2 rounded border border-green-500/20 bg-green-500/10 p-3">
-        <ShieldCheck className="h-5 w-5 text-green-400" />
+        <ShieldCheck className="size-5 text-green-400" />
         <div className="flex-1">
           <p className="text-xs font-medium text-green-400">Token Active</p>
           <p className="text-xs text-neutral-400">

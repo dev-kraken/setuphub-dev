@@ -1,60 +1,50 @@
 'use client';
 
 import { IconSettings } from '@tabler/icons-react';
-import { motion } from 'framer-motion';
 import { toSvg } from 'html-to-image';
+import { motion } from 'motion/react';
 import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useDebouncedValue } from '@/lib/hooks/use-debounced-value';
 
 import { AppearanceControls } from '../components/appearance-controls';
+import { BannerEditorErrorBoundary } from '../components/error-boundary';
 import { BannerPreview } from '../components/banner-preview';
 import { ContentControls } from '../components/content-controls';
 import { ControlSection } from '../components/control-section';
 import { ExportButton } from '../components/export-button';
 import { IconographyControls } from '../components/iconography-controls';
 import { TypographyControls } from '../components/typography-controls';
-import { useDebouncedValue } from '../hooks/use-debounced-value';
 import { DEFAULT_CONFIG } from '../lib/constants';
 import { sanitizeFilename } from '../lib/utils';
 import type { BannerConfig, Theme } from '../types';
 
-export function BannerEditorPage() {
-  // State
+function BannerEditor() {
   const [config, setConfig] = useState<BannerConfig>(DEFAULT_CONFIG);
   const [isExporting, setIsExporting] = useState(false);
   const [exportError, setExportError] = useState<string | null>(null);
   const previewRef = useRef<HTMLDivElement>(null);
 
-  // Debounced values for performance
   const debouncedTitle = useDebouncedValue(config.title);
   const debouncedFooterLeft = useDebouncedValue(config.footerLeft);
   const debouncedFooterRight = useDebouncedValue(config.footerRight);
 
-  // Update handlers
   const updateConfig = useCallback(<K extends keyof BannerConfig>(key: K, value: BannerConfig[K]) => {
     setConfig((prev) => ({ ...prev, [key]: value }));
     setExportError(null);
   }, []);
 
   const handleThemeChange = useCallback((theme: Theme) => updateConfig('theme', theme), [updateConfig]);
-
   const handleAccentColorChange = useCallback((color: string) => updateConfig('accentColor', color), [updateConfig]);
-
   const handleFontChange = useCallback((font: string) => updateConfig('selectedFont', font), [updateConfig]);
-
   const handleFontSizeChange = useCallback((size: number) => updateConfig('titleFontSize', size), [updateConfig]);
-
   const handleIconChange = useCallback((icon: string) => updateConfig('selectedIcon', icon), [updateConfig]);
-
   const handleTitleChange = useCallback((value: string) => updateConfig('title', value), [updateConfig]);
-
   const handleFooterLeftChange = useCallback((value: string) => updateConfig('footerLeft', value), [updateConfig]);
-
   const handleFooterRightChange = useCallback((value: string) => updateConfig('footerRight', value), [updateConfig]);
 
-  // Export handler with error handling
   const handleExport = useCallback(async () => {
     if (!previewRef.current) {
       setExportError('Preview not ready');
@@ -71,10 +61,7 @@ export function BannerEditorPage() {
         quality: 1,
         includeQueryParams: true,
         skipFonts: false,
-        filter: (node) => {
-          if (node instanceof HTMLElement && node.tagName === 'LINK') return false;
-          return true;
-        },
+        filter: (node) => !(node instanceof HTMLElement && node.tagName === 'LINK'),
       });
 
       const link = document.createElement('a');
@@ -83,7 +70,9 @@ export function BannerEditorPage() {
       link.click();
     } catch (error) {
       console.error('Export failed:', error);
-      setExportError('Failed to export banner. Please try again.');
+      const message = 'Failed to export banner. Please try again.';
+      setExportError(message);
+      toast.error(message);
     } finally {
       setIsExporting(false);
     }
@@ -101,11 +90,10 @@ export function BannerEditorPage() {
           <ScrollArea className="flex h-fit max-h-[calc(100vh-20rem)] w-full flex-col gap-6 p-4">
             <div>
               <h2 className="font-oxanium mb-6 flex items-center gap-2 text-xl font-semibold text-white">
-                <IconSettings className="h-5 w-5 text-neutral-400" />
+                <IconSettings className="size-5 text-neutral-400" />
                 Editor Controls
               </h2>
 
-              {/* Appearance */}
               <ControlSection title="Appearance" defaultOpen>
                 <AppearanceControls
                   theme={config.theme}
@@ -115,7 +103,6 @@ export function BannerEditorPage() {
                 />
               </ControlSection>
 
-              {/* Typography */}
               <ControlSection title="Typography">
                 <TypographyControls
                   selectedFont={config.selectedFont}
@@ -125,12 +112,10 @@ export function BannerEditorPage() {
                 />
               </ControlSection>
 
-              {/* Iconography */}
               <ControlSection title="Iconography">
                 <IconographyControls selectedIcon={config.selectedIcon} onIconChange={handleIconChange} />
               </ControlSection>
 
-              {/* Content */}
               <ControlSection title="Content" defaultOpen>
                 <ContentControls
                   title={config.title}
@@ -149,11 +134,7 @@ export function BannerEditorPage() {
         <div className="flex flex-col items-center lg:col-span-8">
           <div className="mb-6 flex w-full items-end justify-between">
             <h2 className="font-oxanium text-3xl font-semibold text-white">Preview</h2>
-            <ExportButton
-              isExporting={isExporting}
-              error={exportError}
-              onExport={() => handleExport().catch((error: Error) => toast.error(error.message))}
-            />
+            <ExportButton isExporting={isExporting} error={exportError} onExport={handleExport} />
           </div>
 
           <BannerPreview
@@ -166,6 +147,14 @@ export function BannerEditorPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export function BannerEditorPage() {
+  return (
+    <BannerEditorErrorBoundary>
+      <BannerEditor />
+    </BannerEditorErrorBoundary>
   );
 }
 

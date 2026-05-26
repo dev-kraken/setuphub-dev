@@ -76,11 +76,11 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
   // Show skeleton while refreshing after first-time token creation
   if (isRefreshing) {
     return (
-      <div className="animate-in fade-in space-y-3 duration-200">
+      <div className="animate-in fade-in flex flex-col gap-3 duration-200">
         {/* Token Active status skeleton */}
         <div className="flex items-center gap-2 rounded border border-green-500/20 bg-green-500/10 p-3">
-          <Skeleton className="h-5 w-5 rounded bg-green-500/30" />
-          <div className="flex-1 space-y-1.5">
+          <Skeleton className="size-5 rounded bg-green-500/30" />
+          <div className="flex flex-1 flex-col gap-1.5">
             <Skeleton className="h-3 w-20 bg-green-500/30" />
             <Skeleton className="h-2.5 w-28 bg-neutral-700/50" />
           </div>
@@ -118,7 +118,7 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-4">
+          <div className="flex flex-col gap-4">
             <div className="flex w-full items-center gap-2">
               <div className="flex min-w-0 flex-1 items-center justify-between overflow-hidden rounded border border-neutral-800 bg-neutral-950 p-1.5">
                 <span className="max-w-96 min-w-0 truncate px-2 font-mono text-xs text-neutral-300">
@@ -131,7 +131,7 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
                   className="h-fit w-fit p-1! text-neutral-600 hover:text-neutral-400"
                   type="button"
                 >
-                  {isTokenVisible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {isTokenVisible ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                 </Button>
               </div>
               <Button
@@ -140,7 +140,7 @@ const GenerateToken = ({ tokenId }: GenerateTokenProps) => {
                 className="shrink-0 rounded border border-neutral-700 bg-neutral-800 text-white transition-colors hover:bg-neutral-700"
                 onClick={handleCopyToken}
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="size-4" />
               </Button>
             </div>
 

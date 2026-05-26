@@ -10,6 +10,7 @@ import { JsonLd } from '@/components/shared/json-ld';
 import { Toaster } from '@/components/ui/sonner';
 import { inter, oxanium } from '@/fonts';
 import { siteConfig } from '@/lib/constants';
+import { clientEnv } from '@/lib/env';
 import {
   constructMetadata,
   createTitleTemplate,
@@ -29,6 +30,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = clientEnv.NEXT_PUBLIC_GA_ID;
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -45,7 +48,7 @@ export default function RootLayout({
             <Toaster richColors={true} />
           </AppBackground>
         </ThemeProvider>
-        <GoogleAnalytics gaId="G-D0MJV3MV1K" />
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );

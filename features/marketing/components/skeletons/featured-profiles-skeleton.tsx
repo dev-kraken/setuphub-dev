@@ -3,8 +3,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 const FeaturedProfilesSkeleton = () => {
   return (
-    <section className="mx-auto max-w-6xl space-y-8 py-12">
-      <div className="space-y-2 text-center">
+    <section className="mx-auto flex max-w-6xl flex-col gap-8 py-12">
+      <div className="flex flex-col gap-2 text-center">
         <Skeleton className="mx-auto h-8 w-64" />
         <Skeleton className="mx-auto h-12 w-96" />
       </div>

@@ -3,16 +3,15 @@
 import { IconArrowRight, IconCode } from '@tabler/icons-react';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import { useMemo } from 'react';
 
 import PatternBackground from '@/components/shared/pattern-background';
 import StarButton from '@/components/shared/star-button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { getIdeMeta } from '@/lib/config/ide-registry';
+import { cn, getInitial } from '@/lib/utils';
 import { type SetupContent, type SetupWithUser } from '@/types/setup';
 
-/** Tailwind background color classes for indicator dots */
 const INDICATOR_COLORS = [
   'bg-red-500',
   'bg-orange-500',
@@ -33,15 +32,11 @@ const INDICATOR_COLORS = [
   'bg-rose-500',
 ] as const;
 
-/**
- * Generates a deterministic index from a seed string
- */
-const getColorIndex = (seed: string, offset: number = 0): number => {
+const getColorIndex = (seed: string, offset = 0): number => {
   let hash = 0;
   for (let i = 0; i < seed.length; i++) {
-    const char = seed.charCodeAt(i);
-    hash = (hash << 5) - hash + char;
-    hash = hash & hash;
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
   }
   return Math.abs(hash + offset) % INDICATOR_COLORS.length;
 };
@@ -56,38 +51,32 @@ interface PublicSetupCardProps {
  * Used on the homepage, explore page, and user profile pages.
  */
 const PublicSetupCard = ({ setup }: PublicSetupCardProps) => {
-  const content: SetupContent = setup.setups.content;
-  const { theme, fontFamily, fontSize } = content;
+  const { theme, fontFamily, fontSize }: SetupContent = setup.setups.content;
 
   const userName = setup.user.name || '';
   const userUsername = setup.user.username || '';
   const userImage = setup.user.image || '';
-
-  const userInitial = userName?.trim()[0] ?? userUsername?.trim()[0] ?? '?';
+  const userInitial = getInitial(userName, userUsername);
 
   const updatedAt = setup.setups.updatedAt ? new Date(setup.setups.updatedAt) : null;
-
   const updatedLabel = updatedAt ? formatDistanceToNow(updatedAt, { addSuffix: true }) : 'some time ago';
 
-  // Deterministic indicator colors based on setup ID
-  const indicatorColors = useMemo(() => {
-    const seed = String(setup.setups.id);
-    return {
-      theme: INDICATOR_COLORS[getColorIndex(seed, 0)],
-      font: INDICATOR_COLORS[getColorIndex(seed, 7)],
-      fontSize: INDICATOR_COLORS[getColorIndex(seed, 13)],
-    };
-  }, [setup.setups.id]);
+  const seed = String(setup.setups.id);
+  const indicatorColors = {
+    theme: INDICATOR_COLORS[getColorIndex(seed, 0)],
+    font: INDICATOR_COLORS[getColorIndex(seed, 7)],
+    fontSize: INDICATOR_COLORS[getColorIndex(seed, 13)],
+  };
 
   const ideMeta = getIdeMeta(setup.setups.editorName);
   const editorName = ideMeta?.label;
 
   return (
     <article
-      className={[
+      className={cn(
         'group relative flex flex-col overflow-hidden rounded-xl border border-neutral-800/50 bg-[#0F0F0F]/50 backdrop-blur-sm',
         'transition-all duration-300 hover:border-neutral-700/50 hover:bg-[#0F0F0F]/70 hover:shadow-2xl hover:shadow-black/50',
-      ].join(' ')}
+      )}
       aria-label={setup.setups.name}
     >
       {/* Top decorative header */}

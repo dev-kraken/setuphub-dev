@@ -54,9 +54,9 @@ const SetupDeleteDialog = ({ setupId }: SetupDeleteDialogProps) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
-        <div className="flex items-start space-x-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100">
-            <AlertTriangleIcon className="h-6 w-6 text-red-600" />
+        <div className="flex items-start gap-4">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100">
+            <AlertTriangleIcon className="size-6 text-red-600" />
           </div>
           <DialogHeader>
             <DialogTitle className="font-oxanium text-2xl font-semibold text-white">Delete setup</DialogTitle>

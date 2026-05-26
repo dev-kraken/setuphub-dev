@@ -40,7 +40,8 @@ export async function getUserStats(userId: string): Promise<UserStats> {
       totalSetups: result?.totalSetups ?? 0,
       totalStars: result?.totalStars ?? 0,
     };
-  } catch {
+  } catch (error) {
+    console.error('getUserStats failed:', error);
     return {
       totalSetups: 0,
       totalStars: 0,
