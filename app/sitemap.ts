@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 
+import { getAllPostSummaries } from '@/features/blog';
 import { siteConfig } from '@/lib/constants';
 import { db } from '@/lib/db';
 
@@ -12,6 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: baseUrl, lastModified: GENERATED_AT, changeFrequency: 'daily', priority: 1 },
     { url: `${baseUrl}/setups`, lastModified: GENERATED_AT, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${baseUrl}/blog`, lastModified: GENERATED_AT, changeFrequency: 'weekly', priority: 0.8 },
     {
       url: `${baseUrl}/tools/github-banner-generator`,
       lastModified: GENERATED_AT,
@@ -20,7 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  const [users, publicSetups] = await Promise.all([
+  const [users, publicSetups, blogPosts] = await Promise.all([
     db.query.user
       .findMany({ columns: { username: true, updatedAt: true } })
       .catch((error: unknown) => {
@@ -37,6 +39,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         console.error('sitemap: failed to fetch public setups', error);
         return [] as { id: string; updatedAt: Date | null; user: { username: string } }[];
       }),
+    // File-system reads can't really fail at build time, but mirror the
+    // pattern for resilience if posts are ever moved to a remote store.
+    getAllPostSummaries().catch((error: unknown) => {
+      console.error('sitemap: failed to load blog posts', error);
+      return [];
+    }),
   ]);
 
   const userRoutes: MetadataRoute.Sitemap = users.map((u) => ({
@@ -53,5 +61,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...userRoutes, ...setupRoutes];
+  const blogRoutes: MetadataRoute.Sitemap = blogPosts.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.meta.updatedAt ?? post.meta.publishedAt),
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...userRoutes, ...setupRoutes, ...blogRoutes];
 }

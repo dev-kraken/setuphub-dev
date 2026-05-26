@@ -1,6 +1,9 @@
 import { ImageResponse } from 'next/og';
 import { type NextRequest } from 'next/server';
 
+import { clampToCodePoints } from '@/lib/og/clamp';
+import { loadGoogleFont } from '@/lib/og/font';
+
 export const runtime = 'edge';
 
 const ONE_DAY_SECONDS = 60 * 60 * 24;
@@ -8,32 +11,11 @@ const ONE_WEEK_SECONDS = ONE_DAY_SECONDS * 7;
 
 const OG_IMAGE_SIZE = { width: 1200, height: 630 } as const;
 
-const fontCache = new Map<string, ArrayBuffer>();
-
-async function loadGoogleFont(font: string, text: string): Promise<ArrayBuffer> {
-  const cacheKey = `${font}-${text}`;
-
-  if (fontCache.has(cacheKey)) {
-    return fontCache.get(cacheKey)!;
-  }
-
-  const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@600&text=${encodeURIComponent(text)}`;
-
-  const css = await fetch(url, { next: { revalidate: ONE_DAY_SECONDS } }).then((res) => res.text());
-  const match = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/);
-
-  if (!match?.[1]) {
-    throw new Error(`Failed to load font: ${font}`);
-  }
-
-  const fontData = await fetch(match[1]).then((res) => {
-    if (!res.ok) throw new Error(`Font fetch failed: ${res.status}`);
-    return res.arrayBuffer();
-  });
-
-  fontCache.set(cacheKey, fontData);
-  return fontData;
-}
+// Param length caps — mirror the blog OG route for consistency and to keep
+// Satori's layout pass cheap on cold renders.
+const USERNAME_MAX = 64;
+const NAME_MAX = 120;
+const IDE_MAX = 32;
 
 function ErrorResponse(message: string, status: 400 | 500 = 400) {
   return new ImageResponse(
@@ -67,9 +49,9 @@ function ErrorResponse(message: string, status: 400 | 500 = 400) {
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url);
 
-  const username = searchParams.get('username');
-  const ide = searchParams.get('ide');
-  const setupName = searchParams.get('name');
+  const username = clampToCodePoints(searchParams.get('username'), USERNAME_MAX);
+  const ide = clampToCodePoints(searchParams.get('ide'), IDE_MAX);
+  const setupName = clampToCodePoints(searchParams.get('name'), NAME_MAX);
 
   if (!setupName) {
     return ErrorResponse('Missing name parameter');
@@ -80,8 +62,9 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const displayText = setupName ? `${setupName} • @${username}` : `@${username}`;
-    const fontData = await loadGoogleFont('Oxanium', displayText + ide);
+    // `setupName` is guarded above, so the ternary that was here is dead.
+    const displayText = `${setupName} • @${username}`;
+    const fontData = await loadGoogleFont({ font: 'Oxanium', text: displayText + ide });
     const bgImageUrl = `${origin}/images/og/og-bg-dy.png`;
 
     return new ImageResponse(
@@ -147,7 +130,7 @@ export async function GET(request: NextRequest) {
               marginBottom: 30,
             }}
           >
-            {ide && `By `} @{username}
+            {ide ? 'By ' : null} @{username}
           </h2>
 
           {ide && (

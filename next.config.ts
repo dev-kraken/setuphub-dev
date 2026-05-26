@@ -1,7 +1,10 @@
+import createMDX from '@next/mdx';
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  // `.mdx` files in `features/blog/content/posts` are imported as modules,
+  // not treated as page files — so we deliberately do NOT extend `pageExtensions`.
   experimental: {
     typedEnv: true,
     // Defer importing the full barrels of these icon/animation/utility packages
@@ -23,4 +26,8 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
+
+export default withMDX(nextConfig);
