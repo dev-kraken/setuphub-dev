@@ -1,0 +1,66 @@
+export const meta = {
+  title: 'IDE onboarding, the fast way',
+  description:
+    'A playbook for getting a new developer productive on day one — pre-built setups, sane defaults, and the extensions worth installing first.',
+  publishedAt: '2026-05-10',
+  author: { name: 'DevKraken', url: 'https://devkraken.com' },
+  tags: ['onboarding', 'productivity', 'vscode'],
+};
+
+The cost of onboarding a new developer is almost never the editor itself. It's the half-day of tab-context-switching: install this, sign in to that, copy this config from a Slack pin from 2023.
+
+This is a playbook for cutting that down to a coffee break.
+
+## How do I onboard a new developer in under 30 minutes?
+
+The fastest onboarding is the one where someone has already made every decision for you. If your team has a SetupHub profile — even an unofficial one — the new hire follows three steps:
+
+1. Install the SetupHub extension.
+2. Run "Apply setup" against the team profile, picked from [Browse Setups](/setups).
+3. Reload the editor.
+
+Three steps, and they have the same extensions, the same lint integrations, the same keybindings as everyone shipping code.
+
+## What belongs in a team VS Code baseline?
+
+A team profile should be opinionated about a small set of things and silent about the rest:
+
+| Include                       | Skip                            |
+| ----------------------------- | ------------------------------- |
+| Formatter + linter extensions | Personal color themes           |
+| Language servers you depend on| Vim/Emacs emulation layers      |
+| Debugger configs              | Cursor position memory tweaks   |
+| Workspace recommendations     | Anything that touches telemetry |
+
+The rule: include things that affect the code that lands in PRs. Skip things that only affect the person typing.
+
+## Which VS Code settings are worth defaulting?
+
+A few settings pay for themselves on the first day:
+
+```json
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true
+}
+```
+
+These five lines remove most of the "why does the diff look like that" questions in week-one PRs.
+
+## Which extensions does a new hire actually need?
+
+Keep the list short. A new hire installing 40 extensions is a new hire spending the afternoon configuring 40 extensions.
+
+- The official language extension for whatever you ship in.
+- Prettier or your formatter of choice.
+- ESLint or your linter of choice.
+- GitLens, if you trust people to read history before they ask.
+
+That's enough to be productive. Everything else can wait for week two.
+
+## How do I make my own setup useful to other developers?
+
+The point of a public setup isn't just "look at my config." It's that every shared setup is a slightly better starting point for the next person. [Publish yours](/setups), link it in your team's onboarding doc, and the next hire skips a half-day of yak-shaving.

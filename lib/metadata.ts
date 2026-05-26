@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import type {
+  Blog,
+  BlogPosting,
   BreadcrumbList,
   CreativeWork,
   Organization,
@@ -93,23 +95,29 @@ export type StructuredDataType =
   | WithContext<Organization>
   | WithContext<CreativeWork>
   | WithContext<Person>
-  | WithContext<BreadcrumbList>;
+  | WithContext<BreadcrumbList>
+  | WithContext<Blog>
+  | WithContext<BlogPosting>;
 
 // ============================================================================
 // UTILITIES
 // ============================================================================
 
-function absoluteUrl(path: string | undefined, baseUrl: string): string {
-  if (!path) return baseUrl;
+/**
+ * Resolves a path (absolute or relative) against `baseUrl`. Returns `baseUrl`
+ * unchanged when `path` is missing — convenient for callers that may not have
+ * a path to attach.
+ */
+export function absoluteUrl(path: string | undefined, baseUrl: string): string {
+  if (!path) return normalizeBaseUrl(baseUrl);
   if (path.startsWith('http')) return path;
 
-  const cleanBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
 
-  return `${cleanBase}${cleanPath}`;
+  return `${normalizeBaseUrl(baseUrl)}${cleanPath}`;
 }
 
-function normalizeBaseUrl(url: string): string {
+export function normalizeBaseUrl(url: string): string {
   return url.endsWith('/') ? url.slice(0, -1) : url;
 }
 
@@ -246,10 +254,26 @@ export function constructMetadata(siteConfig: SiteConfig, params: MetadataParams
 // TITLE TEMPLATE
 // ============================================================================
 
-export function createTitleTemplate(siteName: string, separator = '|'): { default: string; template: string } {
+interface TitleTemplateOptions {
+  /**
+   * Optional homepage/default title shown when a page doesn't override `title`.
+   * Falls back to `brand` when omitted.
+   */
+  defaultTitle?: string;
+  separator?: string;
+}
+
+/**
+ * Builds Next.js's title `{ default, template }`. Keep `brand` short — it gets
+ * appended to every page title, and SERPs truncate around 60 chars total.
+ */
+export function createTitleTemplate(
+  brand: string,
+  { defaultTitle, separator = '|' }: TitleTemplateOptions = {},
+): { default: string; template: string } {
   return {
-    default: siteName,
-    template: `%s ${separator} ${siteName}`,
+    default: defaultTitle ?? brand,
+    template: `%s ${separator} ${brand}`,
   };
 }
 

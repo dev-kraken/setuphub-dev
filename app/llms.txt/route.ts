@@ -1,3 +1,4 @@
+import { getAllPostSummaries } from '@/features/blog';
 import { siteConfig } from '@/lib/constants';
 
 /**
@@ -7,8 +8,20 @@ import { siteConfig } from '@/lib/constants';
  *
  * @see https://llmstxt.org
  */
-export function GET() {
+export async function GET() {
   const base = siteConfig.url.replace(/\/$/, '');
+  const posts = await getAllPostSummaries().catch((error: unknown) => {
+    // Failing the whole llms.txt response because the blog content is missing
+    // is the wrong tradeoff — site discovery still works without the blog block.
+    console.error('llms.txt: failed to load blog posts', error);
+    return [];
+  });
+
+  const articlesBlock = posts.length
+    ? `\n\n## Articles\n\n${posts
+        .map((post) => `- [${post.meta.title}](${base}/blog/${post.slug}): ${post.meta.description}`)
+        .join('\n')}`
+    : '';
 
   const body = `# SetupHub
 
@@ -20,6 +33,7 @@ SetupHub lets developers sync, share, and discover IDE setups (VS Code, Cursor, 
 
 - [Homepage](${base}/): What SetupHub does and how it works.
 - [Browse setups](${base}/setups): Public, paginated index of community-shared IDE setups.
+- [Blog](${base}/blog): Guides and articles on IDE setup, developer tooling, and productive workflows.
 
 ## Tools
 
@@ -29,15 +43,17 @@ SetupHub lets developers sync, share, and discover IDE setups (VS Code, Cursor, 
 
 - User profile: ${base}/{username}
 - Setup detail: ${base}/{username}/{setupId}
+- Blog post: ${base}/blog/{slug}
 
 ## Discovery
 
 - [Sitemap](${base}/sitemap.xml)
-- [Robots](${base}/robots.txt)
+- [RSS feed](${base}/rss.xml)
+- [Robots](${base}/robots.txt)${articlesBlock}
 
 ## Citation policy
 
-All public profile and setup pages on this site are intended to be cited by name and URL. Please link to the canonical URL above and credit the author (\`@username\`) when referencing a configuration.
+All public profile, setup, and blog pages on this site are intended to be cited by name and URL. Please link to the canonical URL above and credit the author (\`@username\`) when referencing a configuration.
 `;
 
   return new Response(body, {

@@ -1,0 +1,48 @@
+export const meta = {
+  title: 'Share your VS Code setup in one click',
+  description:
+    'How SetupHub captures your extensions, themes, and settings, then turns them into a sharable, restorable profile for any machine.',
+  publishedAt: '2026-05-20',
+  author: { name: 'DevKraken', url: 'https://devkraken.com' },
+  tags: ['vscode', 'productivity', 'developer-tools'],
+};
+
+Setting up a new machine usually means an hour of clicking through extension pages, copying snippets out of a Notion doc, and remembering which keybindings you tweaked at 2am six months ago. SetupHub exists so that "an hour" becomes "one click."
+
+## What does SetupHub capture from VS Code?
+
+The SetupHub extension captures three things — and nothing else — when it syncs your editor:
+
+- **Extensions.** The full list, with publisher and version, so a restore on another machine pulls the same builds.
+- **User settings.** Your `settings.json`, minus secrets that match known token patterns.
+- **Keybindings.** Your `keybindings.json` exactly as you wrote it.
+
+Themes and icon packs ride along as extensions, so they restore without any extra step.
+
+> Workspace settings stay in the repo where they belong. SetupHub only touches your *user* configuration.
+
+## Why publish a setup instead of pasting a gist?
+
+A gist is a snapshot of text. A SetupHub profile is restorable. The differences that matter in practice:
+
+1. **One-click restore.** The extension reads your profile and applies it locally without you copying anything.
+2. **Version history.** Every sync is a snapshot. Roll back when an extension update breaks your workflow.
+3. **Discoverability.** Other developers find your setup by username via [Browse Setups](/setups) — no link sharing required.
+
+## How does the sync actually work?
+
+The flow is intentionally boring:
+
+```bash
+# 1. Install the extension
+# 2. Sign in to SetupHub
+# 3. Click "Sync now"
+```
+
+That's it. Behind the scenes the extension serializes your config, signs it with your account, and POSTs it to the SetupHub API. The site stores the snapshot and renders a public page at `setuphub.dev/<your-username>`.
+
+## What's next for SetupHub?
+
+We're working on per-language profiles (one setup for Go work, another for React work), team profiles (shared baselines without forcing personal tweaks), and a Cursor-native experience that mirrors what the VS Code extension does today.
+
+If you want any of these sooner, the fastest way to help is to [publish your setup](/setups) — every profile teaches us what people actually configure.

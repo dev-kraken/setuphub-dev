@@ -22,7 +22,7 @@ import {
 export const viewport = generateViewport();
 
 export const metadata = constructMetadata(siteConfig, {
-  title: createTitleTemplate(siteConfig.name),
+  title: createTitleTemplate(siteConfig.name, { defaultTitle: siteConfig.title }),
 });
 
 export default function RootLayout({
@@ -36,6 +36,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <JsonLd data={[generateOrganizationSchema(siteConfig), generateWebSiteSchema(siteConfig)]} />
+        <link
+          rel="alternate"
+          type="application/atom+xml"
+          title={`${siteConfig.name} — Blog`}
+          href="/rss.xml"
+        />
       </head>
       <body className={`${inter.variable} ${oxanium.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>

@@ -30,6 +30,21 @@ const SiteNav = () => {
             </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink
+            asChild
+            className="font-oxanium bg-transparent text-base font-medium text-neutral-400 transition-colors hover:bg-transparent hover:text-neutral-100"
+          >
+            <Link
+              href="/blog"
+              title="Blog"
+              aria-label="Blog"
+              className="transition-colors hover:text-neutral-100"
+            >
+              Blog
+            </Link>
+          </NavigationMenuLink>
+        </NavigationMenuItem>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger className="font-oxanium bg-transparent text-base font-medium text-neutral-400 transition-colors hover:bg-transparent hover:text-neutral-100">

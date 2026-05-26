@@ -1,7 +1,10 @@
 import type { SiteConfig } from '@/lib/metadata';
 
 export const siteConfig: SiteConfig = {
-  name: 'SetupHub | Share Your IDE Setup with the World',
+  // Short brand. Drives the title template ("%s | SetupHub"), the publisher
+  // name in JSON-LD, the OG `siteName`, and the visible site title. The
+  // long-form headline lives in `title` and only fills the homepage default.
+  name: 'SetupHub',
   title: 'SetupHub - Share Your IDE Setup with the World',
   description:
     'Sync and share your VS Code, Cursor, or any IDE setup with the developer community. One-click backup of extensions, themes, and settings.',
