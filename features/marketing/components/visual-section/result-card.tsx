@@ -7,7 +7,7 @@ const ResultCard = () => {
     <div className="glass-panel animate-float relative col-span-2 h-full overflow-hidden rounded-xl bg-[#0A0A0A] shadow-2xl ring-1 ring-white/10 md:-translate-x-4">
       <div className="relative flex h-28 flex-col justify-between bg-linear-to-br from-rose-500/10 via-purple-500/5 to-transparent p-6">
         <div className="absolute top-4 right-4">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full border border-rose-500/10 bg-rose-500/10 backdrop-blur">
+          <div className="flex size-8 items-center justify-center rounded-full border border-rose-500/10 bg-rose-500/10 backdrop-blur">
             <IconHeartShare className="size-4 text-rose-500" />
           </div>
         </div>
@@ -26,10 +26,10 @@ const ResultCard = () => {
       <div className="p-6 pt-2 pb-4">
         <div className="mb-4 text-[10px] font-semibold tracking-widest text-neutral-600 uppercase">Current Stack</div>
 
-        <div className="space-y-3">
+        <div className="flex flex-col gap-3">
           <div className="group -mx-2 flex cursor-pointer items-center justify-between rounded-lg p-2 transition-colors hover:bg-white/5">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded border border-[#7aa2f7]/20 bg-[#7aa2f7]/10">
+              <div className="flex size-8 items-center justify-center rounded border border-[#7aa2f7]/20 bg-[#7aa2f7]/10">
                 <IconPalette className="size-4 text-[#7aa2f7]" />
               </div>
               <div>
@@ -42,7 +42,7 @@ const ResultCard = () => {
 
           <div className="group -mx-2 flex cursor-pointer items-center justify-between rounded-lg p-2 transition-colors hover:bg-white/5">
             <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 items-center justify-center rounded border border-[#bb9af7]/20 bg-[#bb9af7]/10">
+              <div className="flex size-8 items-center justify-center rounded border border-[#bb9af7]/20 bg-[#bb9af7]/10">
                 <IconTypography className="size-4 text-[#bb9af7]" />
               </div>
               <div>

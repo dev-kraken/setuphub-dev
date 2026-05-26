@@ -6,7 +6,7 @@ const SiteFooter = () => {
       <div className="font-oxanium container mx-auto px-4 py-6">
         <p className="text-muted-foreground text-center text-sm">
           &copy; {new Date().getFullYear()} SetupHub. Made with ❤️ by{' '}
-          <Link target="_blank" href="https://devkraken.com" className="text-primary font-semibold">
+          <Link target="_blank" rel="noopener noreferrer" href="https://devkraken.com" className="text-primary font-semibold">
             DevKraken
           </Link>
           .

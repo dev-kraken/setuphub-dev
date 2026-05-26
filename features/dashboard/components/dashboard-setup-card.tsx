@@ -19,7 +19,7 @@ import {
 import { Separator } from '@/components/ui/separator';
 import { SetupDeleteDialog } from '@/features/dashboard/components/setup-delete-dialog';
 import { getIdeMeta } from '@/lib/config/ide-registry';
-import { cn } from '@/lib/utils';
+import { cn, getInitial } from '@/lib/utils';
 
 import { type UserSetupWithStars } from '../types';
 
@@ -48,7 +48,7 @@ const DashboardSetupCard = ({ setup }: DashboardSetupCardProps) => {
                 alt={`${setup.editorName} logo`}
                 title={`${setup.editorName} logo`}
               />
-              <AvatarFallback>{ideMeta?.label?.charAt(0) || setup.editorName.charAt(0)}</AvatarFallback>
+              <AvatarFallback>{getInitial(ideMeta?.label, setup.editorName)}</AvatarFallback>
             </Avatar>
           </div>
           <div>
@@ -78,10 +78,10 @@ const DashboardSetupCard = ({ setup }: DashboardSetupCardProps) => {
 
       <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
 
-      <CardContent className="space-y-2 text-xs">
+      <CardContent className="flex flex-col gap-2 text-xs">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-neutral-400">
-            <span className="h-2 w-2 rounded-full bg-purple-500" aria-hidden="true" />
+            <span className="size-2 rounded-full bg-purple-500" aria-hidden="true" />
             <span>Theme</span>
           </div>
           <span className="font-inter text-neutral-300">{setup.content.theme}</span>
@@ -89,7 +89,7 @@ const DashboardSetupCard = ({ setup }: DashboardSetupCardProps) => {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-neutral-400">
-            <span className="h-2 w-2 rounded-full bg-yellow-500" aria-hidden="true" />
+            <span className="size-2 rounded-full bg-yellow-500" aria-hidden="true" />
             <span>Font</span>
           </div>
           <span className="font-inter text-neutral-300">{setup.content.fontFamily}</span>
@@ -97,7 +97,7 @@ const DashboardSetupCard = ({ setup }: DashboardSetupCardProps) => {
 
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-neutral-400">
-            <span className="h-2 w-2 rounded-full bg-green-500" aria-hidden="true" />
+            <span className="size-2 rounded-full bg-green-500" aria-hidden="true" />
             <span>Extensions</span>
           </div>
           <span className="font-inter text-neutral-300">{extensionsCount} Installed</span>
@@ -106,7 +106,7 @@ const DashboardSetupCard = ({ setup }: DashboardSetupCardProps) => {
 
       <Separator className="w-full border-t border-dashed border-neutral-800/50 bg-transparent" />
 
-      <CardFooter className="flex flex-col space-y-2">
+      <CardFooter className="flex flex-col gap-2">
         <div className="flex w-full items-center justify-between gap-2">
           <StarButton
             setupId={setup.id}

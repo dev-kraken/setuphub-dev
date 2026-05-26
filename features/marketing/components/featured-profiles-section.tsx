@@ -8,7 +8,7 @@ const FeaturedProfilesSection = async () => {
   return (
     <section
       id="featured-profiles"
-      className="mx-auto max-w-6xl space-y-8 py-12"
+      className="mx-auto flex max-w-6xl flex-col gap-8 py-12"
       aria-labelledby="featured-profiles-heading"
     >
       <div className="text-center">

@@ -41,10 +41,10 @@ export const TypographyControls = memo(function TypographyControls({
   const isCurrentFontPreset = isPresetFont(selectedFont);
 
   return (
-    <div className="w-full space-y-4">
+    <div className="flex w-full flex-col gap-4">
       <div className="w-full">
         <div className="mb-3 flex items-center justify-between">
-          <Label id="font-family-label" className="text-sm font-medium text-neutral-400 font-oxanium">
+          <Label id="font-family-label" className="font-oxanium text-sm font-medium text-neutral-400">
             Font Family
           </Label>
           <span id="font-size-value" className="rounded bg-white/5 px-2 py-1 font-mono text-xs text-neutral-400">
@@ -80,8 +80,8 @@ export const TypographyControls = memo(function TypographyControls({
         </div>
 
         {/* Google Fonts Picker */}
-        <div className="mt-4 w-full space-y-2">
-          <Label className="block text-sm font-medium text-neutral-400 font-oxanium">Or choose from Google Fonts</Label>
+        <div className="mt-4 flex w-full flex-col gap-2">
+          <Label className="font-oxanium block text-sm font-medium text-neutral-400">Or choose from Google Fonts</Label>
           <FontPicker
             value={isCurrentFontPreset ? undefined : selectedFont}
             onChange={handleFontPickerChange}
@@ -91,8 +91,8 @@ export const TypographyControls = memo(function TypographyControls({
         </div>
 
         {/* Font Size Slider */}
-        <div className="mt-4 w-full space-y-3">
-          <Label id="font-size-label" className="block text-sm font-medium text-neutral-400 font-oxanium">
+        <div className="mt-4 flex w-full flex-col gap-3">
+          <Label id="font-size-label" className="font-oxanium block text-sm font-medium text-neutral-400">
             Font Size
           </Label>
           <div className="flex items-center gap-3 rounded-xl border border-white/5 bg-black/20 p-3">

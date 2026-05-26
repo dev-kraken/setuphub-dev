@@ -1,3 +1,9 @@
 packages:
   - '.'
   - 'ide-extension'
+allowBuilds:
+  '@vscode/vsce-sign': true
+  esbuild: true
+  keytar: true
+  sharp: true
+  unrs-resolver: true

@@ -1,7 +1,7 @@
 import { JsonLd } from '@/components/shared/json-ld';
 import { BannerEditorPage } from '@/features/banner-editor';
 import { siteConfig } from '@/lib/constants';
-import { constructMetadata, generateWebPageSchema } from '@/lib/metadata';
+import { constructMetadata, generateBreadcrumbSchema, generateWebPageSchema } from '@/lib/metadata';
 
 const PAGE_TITLE = 'GitHub Banner Generator';
 const PAGE_DESCRIPTION =
@@ -31,12 +31,19 @@ export default function Page() {
   return (
     <>
       <JsonLd
-        data={generateWebPageSchema(siteConfig, {
-          title: PAGE_TITLE,
-          description: PAGE_DESCRIPTION,
-          url: PAGE_URL,
-          image: '/images/og/og-github-banner-generator.webp',
-        })}
+        data={[
+          generateBreadcrumbSchema(siteConfig, [
+            { name: 'Home', url: '/' },
+            { name: 'Tools', url: '/tools' },
+            { name: PAGE_TITLE, url: PAGE_URL },
+          ]),
+          generateWebPageSchema(siteConfig, {
+            title: PAGE_TITLE,
+            description: PAGE_DESCRIPTION,
+            url: PAGE_URL,
+            image: `${siteConfig.url}/images/og/og-github-banner-generator.webp`,
+          }),
+        ]}
       />
       <main id="main" aria-label="GitHub banner generator">
         <header className="mx-auto max-w-7xl px-8 pt-8 pb-2">

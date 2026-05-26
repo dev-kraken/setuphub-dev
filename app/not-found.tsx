@@ -13,7 +13,7 @@ export default function NotFound() {
       <div className="mx-auto max-w-md text-center">
         <div className="mb-6 flex justify-center">
           <div className="rounded-full bg-neutral-800 p-4">
-            <IconFileOff className="h-12 w-12 text-neutral-400" />
+            <IconFileOff className="size-12 text-neutral-400" />
           </div>
         </div>
 
@@ -26,14 +26,14 @@ export default function NotFound() {
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Button asChild className="flex items-center gap-2">
             <Link href="/">
-              <IconHome className="h-4 w-4" />
+              <IconHome className="size-4" />
               Go Home
             </Link>
           </Button>
 
           <Button variant="outline" asChild className="flex items-center gap-2">
             <Link href="/setups">
-              <IconSearch className="h-4 w-4" />
+              <IconSearch className="size-4" />
               Browse Setups
             </Link>
           </Button>

@@ -32,9 +32,9 @@ export const AppearanceControls = memo(function AppearanceControls({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col gap-4">
       <div>
-        <Label className="mb-3 block text-sm font-medium text-neutral-400 font-oxanium">Theme</Label>
+        <Label className="font-oxanium mb-3 block text-sm font-medium text-neutral-400">Theme</Label>
         <ToggleGroup
           type="single"
           value={theme}
@@ -70,14 +70,14 @@ export const AppearanceControls = memo(function AppearanceControls({
       </div>
 
       <div>
-        <Label className="mb-3 block text-sm font-medium text-neutral-400 font-oxanium">Accent Color</Label>
+        <Label className="font-oxanium mb-3 block text-sm font-medium text-neutral-400">Accent Color</Label>
         <div className="flex flex-wrap gap-3 px-2" role="radiogroup" aria-label="Accent color selection">
           {PRESET_COLORS.map((color) => (
             <button
               key={color}
               onClick={() => onAccentColorChange(color)}
               className={cn(
-                'h-10 w-10 rounded-full border-2 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none',
+                'size-10 rounded-full border-2 transition-all hover:scale-110 focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-black focus-visible:outline-none',
                 accentColor === color
                   ? 'scale-110 border-white shadow-lg shadow-white/20'
                   : 'border-transparent hover:border-white/20',
@@ -88,15 +88,15 @@ export const AppearanceControls = memo(function AppearanceControls({
               aria-checked={accentColor === color}
             />
           ))}
-          <div className="relative h-10 w-10 overflow-hidden rounded-full border-2 border-neutral-700 transition-colors focus-within:ring-2 focus-within:ring-white/50 focus-within:ring-offset-2 focus-within:ring-offset-black hover:border-neutral-500">
+          <div className="relative size-10 overflow-hidden rounded-full border-2 border-neutral-700 transition-colors focus-within:ring-2 focus-within:ring-white/50 focus-within:ring-offset-2 focus-within:ring-offset-black hover:border-neutral-500">
             <input
               type="color"
               value={accentColor}
               onChange={handleColorChange}
-              className="absolute -top-2 -left-2 h-16 w-16 cursor-pointer opacity-0"
+              className="absolute -top-2 -left-2 size-16 cursor-pointer opacity-0"
               aria-label="Custom color picker"
             />
-            <div className="h-full w-full" style={{ backgroundColor: accentColor }} aria-hidden="true" />
+            <div className="size-full" style={{ backgroundColor: accentColor }} aria-hidden="true" />
           </div>
         </div>
       </div>

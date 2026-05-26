@@ -12,7 +12,12 @@ import {
   UserInfo,
 } from '@/features/user-profile';
 import { siteConfig } from '@/lib/constants';
-import { constructMetadata, generatePersonSchema, generateWebPageSchema } from '@/lib/metadata';
+import {
+  constructMetadata,
+  generateBreadcrumbSchema,
+  generatePersonSchema,
+  generateWebPageSchema,
+} from '@/lib/metadata';
 import { truncateTextForDescriptionSEO } from '@/lib/utils';
 
 type PageProps = {
@@ -37,20 +42,26 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : `${profileUser.name} (@${profileUser.username}) on SetupHub. ${stats.totalSetups} setup${stats.totalSetups !== 1 ? 's' : ''} shared with the developer community.`;
 
   const profileUrl = `/${username}`;
-  const imageUrl = `/api/og?username=${encodeURIComponent(profileUser.username)}&name=${encodeURIComponent(profileUser.name)}`;
+  const ogImageUrl = `/api/og?username=${encodeURIComponent(profileUser.username)}&name=${encodeURIComponent(profileUser.name)}`;
 
   return constructMetadata(siteConfig, {
     title: `${profileUser.name} (@${profileUser.username})`,
     description,
     url: profileUrl,
-    image: imageUrl,
+    image: {
+      url: ogImageUrl,
+      width: 1200,
+      height: 630,
+      alt: `${profileUser.name} (@${profileUser.username}) on SetupHub`,
+    },
     type: 'website',
     openGraph: {
       type: 'profile',
       siteName: siteConfig.name,
     },
     twitter: {
-      card: 'summary',
+      // OG image is 1200x630 — use the large-image card to display it properly.
+      card: 'summary_large_image',
       creator: profileUser.profile?.twitterUsername ? `@${profileUser.profile.twitterUsername}` : undefined,
     },
   });
@@ -75,6 +86,10 @@ const Page = async ({ params }: PageProps) => {
     <main>
       <JsonLd
         data={[
+          generateBreadcrumbSchema(siteConfig, [
+            { name: 'Home', url: '/' },
+            { name: profileUser.name, url: profileUrl },
+          ]),
           generateWebPageSchema(siteConfig, {
             title: `${profileUser.name} (@${profileUser.username})`,
             description:

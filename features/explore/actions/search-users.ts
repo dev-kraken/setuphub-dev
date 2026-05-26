@@ -79,7 +79,8 @@ export async function searchUsers(query: string): Promise<SearchUsersResult> {
     const users = results.slice(0, SEARCH_LIMIT);
 
     return { users, hasMore };
-  } catch {
+  } catch (error) {
+    console.error('searchUsers failed:', error);
     return { users: [], hasMore: false };
   }
 }

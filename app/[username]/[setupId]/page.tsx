@@ -6,7 +6,12 @@ import { getSetupById } from '@/features/setup-detail';
 import { SetupDetailPage } from '@/features/setup-detail';
 import { getIdeMeta } from '@/lib/config/ide-registry';
 import { siteConfig } from '@/lib/constants';
-import { constructMetadata, generateSetupSchema, generateWebPageSchema } from '@/lib/metadata';
+import {
+  constructMetadata,
+  generateBreadcrumbSchema,
+  generateSetupSchema,
+  generateWebPageSchema,
+} from '@/lib/metadata';
 import { truncateTextForDescriptionSEO } from '@/lib/utils';
 
 type PageProps = {
@@ -32,13 +37,18 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     `${setupName} - ${ideMeta.label} configuration shared by ${setup.user.name} on SetupHub. Star this setup to help others find it.`;
 
   const setupUrl = `/${username}/${setupId}`;
-  const imageUrl = `/api/og?username=${encodeURIComponent(setup.user.username)}&ide=${encodeURIComponent(ideMeta.label)}&name=${encodeURIComponent(setupName)}`;
+  const ogImageUrl = `/api/og?username=${encodeURIComponent(setup.user.username)}&ide=${encodeURIComponent(ideMeta.label)}&name=${encodeURIComponent(setupName)}`;
 
   return constructMetadata(siteConfig, {
     title: `${setupName} by ${setup.user.name}`,
     description,
     url: setupUrl,
-    image: imageUrl,
+    image: {
+      url: ogImageUrl,
+      width: 1200,
+      height: 630,
+      alt: `${setupName} — ${ideMeta.label} setup by ${setup.user.name} on SetupHub`,
+    },
     type: 'website',
     keywords: [
       ...siteConfig.keywords,
@@ -69,14 +79,15 @@ export default async function Page({ params }: PageProps) {
   const ideMeta = getIdeMeta(setup.setups.editorName);
   const setupUrl = `/${username}/${setupId}`;
   const authorUrl = `/${username}`;
-  const imageUrl = setup.user.image || siteConfig.ogImage;
-  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `${siteConfig.url}${imageUrl}`;
-  const ideIconUrl = ideMeta.icon.startsWith('http') ? ideMeta.icon : `${siteConfig.url}${ideMeta.icon}`;
 
   const setupName = setup.setups.name;
   const description =
     truncateTextForDescriptionSEO(setup.setups.description ?? '') ||
     `${setupName} - ${ideMeta.label} configuration shared by ${setup.user.name} on SetupHub.`;
+
+  // Use the dynamic OG image (1200×630) as the canonical visual for both the
+  // page and the CreativeWork — the IDE icon is brand art, not setup imagery.
+  const ogImageUrl = `${siteConfig.url}/api/og?username=${encodeURIComponent(setup.user.username)}&ide=${encodeURIComponent(ideMeta.label)}&name=${encodeURIComponent(setupName)}`;
 
   return (
     <main className="relative min-h-screen w-full">
@@ -88,11 +99,16 @@ export default async function Page({ params }: PageProps) {
 
       <JsonLd
         data={[
+          generateBreadcrumbSchema(siteConfig, [
+            { name: 'Home', url: '/' },
+            { name: setup.user.name, url: authorUrl },
+            { name: setupName, url: setupUrl },
+          ]),
           generateWebPageSchema(siteConfig, {
             title: `${setupName} by ${setup.user.name}`,
             description,
             url: setupUrl,
-            image: absoluteImageUrl,
+            image: ogImageUrl,
             publishedTime: setup.setups.createdAt.toISOString(),
             modifiedTime: setup.setups.updatedAt.toISOString(),
           }),
@@ -102,11 +118,12 @@ export default async function Page({ params }: PageProps) {
             url: setupUrl,
             authorName: setup.user.name,
             authorUrl,
+            authorUsername: setup.user.username,
             editorName: setup.setups.editorName,
             editorLabel: ideMeta.label,
             createdAt: setup.setups.createdAt.toISOString(),
             updatedAt: setup.setups.updatedAt.toISOString(),
-            image: ideIconUrl,
+            image: ogImageUrl,
             starCount: setup.starData?.starCount,
           }),
         ]}

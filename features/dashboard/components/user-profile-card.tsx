@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { signOut } from '@/lib/auth/client';
+import { getInitial } from '@/lib/utils';
 import { type CurrentUser } from '@/types/user';
 
 import { type UserProfileData } from '../types';
@@ -42,12 +43,12 @@ const UserProfileCard = ({ user, profile }: UserProfileCardProps) => {
   };
 
   return (
-    <div className="glass-card hover:glass-card-hover relative space-y-3 rounded-lg border border-neutral-800 bg-neutral-900/80 p-5 backdrop-blur-sm">
+    <div className="glass-card hover:glass-card-hover relative flex flex-col gap-3 rounded-lg border border-neutral-800 bg-neutral-900/80 p-5 backdrop-blur-sm">
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
           <Avatar className="size-18">
             <AvatarImage src={user.image || ''} alt={user.name} title={user.name} />
-            <AvatarFallback>{user.name[0]}</AvatarFallback>
+            <AvatarFallback>{getInitial(user.name, user.username)}</AvatarFallback>
           </Avatar>
           <div>
             <div className="font-oxanium text-xl font-medium text-white">{user.name}</div>
@@ -72,7 +73,7 @@ const UserProfileCard = ({ user, profile }: UserProfileCardProps) => {
           </Button>
         </div>
       </div>
-      <div className="space-y-3">
+      <div className="flex flex-col gap-3">
         {/* Bio */}
         {profile?.bio && <p className="text-sm text-neutral-400">{profile.bio}</p>}
 
