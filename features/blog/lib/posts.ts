@@ -1,17 +1,19 @@
 import 'server-only';
 
 import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { cache } from 'react';
 
 import { countWords, extractProse } from './extract-prose';
 import { estimateReadingTime } from './reading-time';
 import type { Post, PostMeta, PostSummary } from './types';
 
-// Resolve relative to this file rather than `process.cwd()` — survives a
-// monorepo move or a Worker context where cwd is unrelated to the project root.
-const POSTS_DIR = join(dirname(fileURLToPath(import.meta.url)), '..', 'content', 'posts');
+// Resolved against the deploy root via `process.cwd()`. In Vercel/Lambda the
+// JS is bundled into `.next/server/chunks/...`, so an `import.meta.url`-based
+// path would point to the chunk location — not where the .mdx files actually
+// ship to. `process.cwd()` is `/var/task` on Lambda, which matches the layout
+// produced by `outputFileTracingIncludes` in `next.config.ts`.
+const POSTS_DIR = join(process.cwd(), 'features', 'blog', 'content', 'posts');
 const MDX_EXT = '.mdx';
 
 /** Cap the JSON-LD `articleBody` so the page payload stays sensible. */
